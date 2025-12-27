@@ -3,54 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Ashutosh | Ideas</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <div class="nav-container">
-            <div class="logo">🦉 Ashutosh.me</div>
-            <nav class="nav-links">
-                <a href="index.html" class="btn btn-nav">Home</a>
-                <a href="ideas.html" class="btn btn-nav active">Ideas</a>
-            </nav>
-        </div>
-    </header>
-
-    <section>
-        <h2>🧠 The Brain Dump</h2>
-        <p>My thoughts on cricket, code, and society.</p>
-        
-        <div style="margin: 30px 0; display: flex; gap: 10px;">
-            <button class="btn btn-nav" onclick="filterSelection('all')">All</button>
-            <button class="btn btn-nav" onclick="filterSelection('sports')">🏏 Sports</button>
-            <button class="btn btn-nav" onclick="filterSelection('tech')">💻 Tech</button>
-            <button class="btn btn-nav" onclick="filterSelection('social')">🌍 Social</button>
-        </div>
-
-        <div class="grid">
-            <div class="card column sports">
-                <span class="tag sports">Sports</span>
-                <h3>Why T20 Strategy is Broken</h3>
-                <p>Analyzing the strike rates of middle-order batsman...</p>
-                <br><a href="#" style="color: var(--duo-blue); font-weight: 700;">Read More →</a>
-            </div>
-
-            <div class="card column tech">
-                <span class="tag tech">Tech</span>
-                <h3>iOS 18 Predictions</h3>
-                <p>What I think Apple will do with AI on the next iPhone...</p>
-                <br><a href="#" style="color: var(--duo-blue); font-weight: 700;">Read More →</a>
-            </div>
-
-            <div class="card column social">
-                <span class="tag social">Social</span>
-                <h3>Digital Minimalism</h3>
-                <p>How I reduced my screen time while working in tech...</p>
-                <br><a href="#" style="color: var(--duo-blue); font-weight: 700;">Read More →</a>
+    <nav class="navbar">
+        <div class="container nav-flex">
+            <div class="logo">🔮 Ashutosh.me</div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <a href="profile.html">Profile</a>
+                <a href="projects.html">Projects</a>
+                <a href="ideas.html">Mind Garden</a>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <script src="script.js"></script>
+    <div class="container" style="padding-top: 60px;">
+        <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+            <h1>The Mind Garden</h1>
+            <p>Raw thoughts, finished articles, and "I might be wrong" ideas.</p>
+            
+            <div class="search-wrapper">
+                <input type="text" class="search-input" placeholder="Search for 'cricket', 'iOS', or 'life'...">
+            </div>
+        </div>
+
+        <div class="grid-3">
+            <article class="card">
+                <div style="height: 150px; background: #e0cffc; border-radius: var(--radius-l); margin-bottom: 20px;"></div>
+                <span class="badge bg-lav" style="width: fit-content;">Tech</span>
+                <h3 style="margin: 10px 0;">SwiftUI vs UIKit</h3>
+                <p>My honest take on why UIKit isn't dying anytime soon.</p>
+                <a href="#" style="color: var(--primary); font-weight: 800; margin-top: auto;">Read Article →</a>
+            </article>
+
+            <article class="card">
+                <div style="height: 150px; background: #cffce0; border-radius: var(--radius-l); margin-bottom: 20px;"></div>
+                <span class="badge bg-mint" style="width: fit-content;">Sports</span>
+                <h3 style="margin: 10px 0;">The T20 Revolution</h3>
+                <p>Data analysis of how strike rates have evolved since 2016.</p>
+                <a href="#" style="color: var(--primary); font-weight: 800; margin-top: auto;">Read Article →</a>
+            </article>
+
+            <article class="card">
+                <div style="height: 150px; background: #fce0cf; border-radius: var(--radius-l); margin-bottom: 20px;"></div>
+                <span class="badge bg-pink" style="width: fit-content;">Social</span>
+                <h3 style="margin: 10px 0;">Digital Fatigue</h3>
+                <p>Why we are all tired of notifications.</p>
+                <a href="#" style="color: var(--primary); font-weight: 800; margin-top: auto;">Read Article →</a>
+            </article>
+        </div>
+    </div>
+    <script src="main.js"></script>
 </body>
 </html>
