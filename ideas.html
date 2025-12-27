@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ashutosh | Ideas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo">🦉 Ashutosh.me</div>
+            <nav class="nav-links">
+                <a href="index.html" class="btn btn-nav">Home</a>
+                <a href="ideas.html" class="btn btn-nav active">Ideas</a>
+            </nav>
+        </div>
+    </header>
+
+    <section>
+        <h2>🧠 The Brain Dump</h2>
+        <p>My thoughts on cricket, code, and society.</p>
+        
+        <div style="margin: 30px 0; display: flex; gap: 10px;">
+            <button class="btn btn-nav" onclick="filterSelection('all')">All</button>
+            <button class="btn btn-nav" onclick="filterSelection('sports')">🏏 Sports</button>
+            <button class="btn btn-nav" onclick="filterSelection('tech')">💻 Tech</button>
+            <button class="btn btn-nav" onclick="filterSelection('social')">🌍 Social</button>
+        </div>
+
+        <div class="grid">
+            <div class="card column sports">
+                <span class="tag sports">Sports</span>
+                <h3>Why T20 Strategy is Broken</h3>
+                <p>Analyzing the strike rates of middle-order batsman...</p>
+                <br><a href="#" style="color: var(--duo-blue); font-weight: 700;">Read More →</a>
+            </div>
+
+            <div class="card column tech">
+                <span class="tag tech">Tech</span>
+                <h3>iOS 18 Predictions</h3>
+                <p>What I think Apple will do with AI on the next iPhone...</p>
+                <br><a href="#" style="color: var(--duo-blue); font-weight: 700;">Read More →</a>
+            </div>
+
+            <div class="card column social">
+                <span class="tag social">Social</span>
+                <h3>Digital Minimalism</h3>
+                <p>How I reduced my screen time while working in tech...</p>
+                <br><a href="#" style="color: var(--duo-blue); font-weight: 700;">Read More →</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
