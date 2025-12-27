@@ -1,11 +1,646 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Ashutosh Srivastava</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashutosh Srivastava | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS Variables & The "Duolingo" Palette --- */
+        :root {
+            /* Core Palette */
+            --duo-green: #58cc02;
+            --duo-green-shadow: #46a302;
+            --duo-blue: #1cb0f6;
+            --duo-blue-shadow: #1899d6;
+            --duo-yellow: #ffc800;
+            --duo-yellow-shadow: #e5b300;
+            --duo-peach: #ff9600;
+            --duo-peach-shadow: #e58700;
+            --duo-purple: #ce82ff;
+            --duo-purple-shadow: #a568cc;
+            
+            /* Neutrals */
+            --bg-pastel: #fffcea; /* Very light warm background */
+            --text-dark: #3c3c3c; /* Soft black */
+            --text-light: #777777;
+            --card-white: #ffffff;
+            --border-grey: #e5e5e5;
+
+            /* Global styles */
+            --border-radius-large: 20px;
+            --border-radius-small: 12px;
+            --section-spacing: 80px;
+        }
+
+        /* --- Base Reset & Typography --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-pastel);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-dark);
+        }
+
+        h1 { font-size: 2.5rem; line-height: 1.2; }
+        h2 { font-size: 2rem; margin-bottom: 24px; text-align: center; }
+        h3 { font-size: 1.5rem; margin-bottom: 12px; }
+        p { font-size: 1.1rem; color: var(--text-light); margin-bottom: 16px; }
+
+        a { text-decoration: none; }
+        ul { list-style: none; }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- The "Squishy" Duolingo Button Style --- */
+        /* This creates the tactile 3D effect using borders instead of shadows */
+        .duo-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: var(--border-radius-small);
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-align: center;
+            border: none;
+            position: relative;
+            top: 0;
+        }
+
+        /* Green Primary Button */
+        .btn-primary {
+            background-color: var(--duo-green);
+            color: white;
+            box-shadow: 0 4px 0 var(--duo-green-shadow);
+        }
+        .btn-primary:active {
+            top: 4px;
+            box-shadow: 0 0px 0 var(--duo-green-shadow);
+        }
+
+        /* Blue Secondary Button (used in Nav) */
+        .btn-secondary {
+            background-color: var(--card-white);
+            color: var(--duo-blue);
+            border: 2px solid var(--border-grey);
+            box-shadow: 0 4px 0 var(--border-grey);
+        }
+        .btn-secondary:hover {
+            border-color: var(--duo-blue);
+            color: var(--duo-blue);
+        }
+        .btn-secondary:active {
+            top: 4px;
+            box-shadow: 0 0px 0 var(--border-grey);
+        }
+
+        /* --- Animations --- */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            60% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-pop { animation: popIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+
+        /* --- Header & Navigation --- */
+        header {
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 252, 234, 0.9); /* Semi-transparent background */
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 2px solid var(--border-grey);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--duo-green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            padding: var(--section-spacing) 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 70vh;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--duo-blue);
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        /* Placeholder for a vector mascot illustration */
+        .hero-illustration {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            animation: bounce 3s ease-in-out infinite;
+        }
+        .mascot-placeholder {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(45deg, var(--duo-green), var(--duo-yellow));
+            border-radius: 50% 40% 60% 50%; /* Organic blob shape */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 12px 12px 0px rgba(88, 204, 2, 0.2);
+            position: relative;
+        }
+        /* Simple CSS Face for placeholder */
+        .mascot-face { font-size: 10rem; color: white; }
+
+
+        /* --- Shared Section Styles --- */
+        section {
+            padding: var(--section-spacing) 0;
+            border-bottom: 2px dashed var(--border-grey);
+        }
+
+        /* --- About Me --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .profile-card {
+            background: var(--card-white);
+            padding: 32px;
+            border-radius: var(--border-radius-large);
+            text-align: center;
+            border: 2px solid var(--border-grey);
+            box-shadow: 0 6px 0 var(--border-grey);
+        }
+        
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            background-color: var(--duo-blue);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            border: 4px solid var(--card-white);
+            box-shadow: 0 0 0 4px var(--duo-blue-shadow);
+            display: flex; /* Placeholder alignment */
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem; color: white;
+        }
+
+        .hobbies-container {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .hobby-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        .hobby-icon:hover { transform: scale(1.1) rotate(10deg); }
+
+        /* --- Skills Badges --- */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .skill-badge {
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+        }
+
+        /* --- Projects Section --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .project-card {
+            background: var(--card-white);
+            border-radius: var(--border-radius-large);
+            overflow: hidden;
+            border: 2px solid var(--border-grey);
+            box-shadow: 0 6px 0 var(--border-grey);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            top: 0;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 0 var(--border-grey);
+        }
+        
+        .project-card:active {
+             top: 4px;
+             box-shadow: 0 2px 0 var(--border-grey);
+        }
+
+        .project-header {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--border-radius-small);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.1);
+        }
+        .project-body {
+            padding: 24px;
+            border-top: 2px solid var(--border-grey);
+        }
+        .project-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .tag {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            background: var(--bg-pastel);
+            color: var(--text-light);
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+
+        /* --- Contact Section --- */
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-white);
+            padding: 40px;
+            border-radius: var(--border-radius-large);
+            border: 2px solid var(--border-grey);
+            box-shadow: 0 8px 0 var(--border-grey);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border-grey);
+            border-radius: var(--border-radius-small);
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: var(--bg-pastel);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--duo-blue);
+            background: var(--card-white);
+        }
+        textarea.form-input { resize: vertical; height: 120px;}
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .social-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            top: 0;
+            position: relative;
+        }
+        .social-btn:hover { transform: scale(1.1); }
+        .social-btn:active { top: 4px; box-shadow: 0 0 0; }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+
+        /* Confetti Animation elements */
+        .confetti-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 999; display: none;
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 10px; height: 10px;
+            background: var(--duo-yellow);
+            top: -10px; opacity: 0;
+        }
+
+        /* --- Media Queries for Responsiveness --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .nav-links { display: none; } /* Simplification for mobile */
+            #hero { flex-direction: column-reverse; text-align: center; padding-top: 40px;}
+            .hero-illustration { margin-bottom: 40px; }
+            .mascot-placeholder { width: 250px; height: 250px; }
+            .about-grid { grid-template-columns: 1fr; }
+            .contact-container { padding: 24px; }
+        }
+    </style>
 </head>
 <body>
-  <h1>Ashutosh Srivastava</h1>
-  <p>Final-year CSE student at VIT-AP. iOS dev, cricket analytics, and product management enthusiast.</p>
+
+    <header>
+        <div class="container nav">
+            <div class="logo">
+                <span style="color: var(--duo-blue);">✦</span> Ashutosh S.
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero" class="duo-btn btn-secondary">Home</a></li>
+                <li><a href="#about" class="duo-btn btn-secondary">About</a></li>
+                <li><a href="#projects" class="duo-btn btn-secondary">Projects</a></li>
+                <li><a href="#contact" class="duo-btn btn-secondary">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="container" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <div class="hero-content animate-pop">
+                    <span class="tagline">👋 Hi there! I'm Ashutosh.</span>
+                    <h1>Building ideas that connect technology, sports, and people.</h1>
+                    <p>iOS Developer, Product Manager, and Cricket Analytics Enthusiast.</p>
+                    <a href="#projects" class="duo-btn btn-primary">Explore My Work</a>
+                </div>
+                <div class="hero-illustration animate-pop delay-1">
+                    <div class="mascot-placeholder">
+                        <div class="mascot-face">🦉</div> 
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2>About Me</h2>
+                <div class="about-grid">
+                    <div class="profile-card animate-pop">
+                        <div class="profile-avatar">👨‍💻</div>
+                        <h3>Ashutosh Srivastava</h3>
+                        <p>VIT AP Graduate</p>
+                        <div class="hobbies-container">
+                            <div class="hobby-icon" style="background: var(--duo-blue);">💻</div>
+                            <div class="hobby-icon" style="background: var(--duo-green);">🏏</div>
+                            <div class="hobby-icon" style="background: var(--duo-yellow);">💡</div>
+                        </div>
+                    </div>
+                    <div class="about-content animate-pop delay-1">
+                        <h3>My Journey</h3>
+                        <p>I sit at the intersection of engineering and strategy. I love crafting buttery-smooth iOS experiences, defining product roadmaps that solve real problems, and diving deep into data to find the winning edge in sports analytics.</p>
+                        
+                        <h3 style="margin-top: 32px;">Skills & Superpowers</h3>
+                        <div class="skills-container">
+                            <div class="skill-badge" style="background: var(--duo-peach);">Swift & iOS</div>
+                            <div class="skill-badge" style="background: var(--duo-blue);">Product Management</div>
+                            <div class="skill-badge" style="background: var(--duo-green);">Python & AI/ML</div>
+                            <div class="skill-badge" style="background: var(--duo-purple);">Cricket Analytics</div>
+                            <div class="skill-badge" style="background: var(--duo-yellow);">SQL & Data</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="container">
+                <h2>Featured Projects</h2>
+                <div class="projects-grid">
+                    <div class="project-card animate-pop">
+                        <div class="project-header" style="background: var(--duo-blue-shadow);">
+                            <div class="project-icon" style="background: var(--duo-blue);">📊</div>
+                            <h3 style="color: white; margin:0;">Dash Scorecard</h3>
+                        </div>
+                        <div class="project-body">
+                            <p>A real-time cricket analytics dashboard providing deep insights and predictive modeling for match outcomes.</p>
+                            <div class="project-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">Data Viz</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card animate-pop delay-1">
+                        <div class="project-header" style="background: var(--duo-green-shadow);">
+                            <div class="project-icon" style="background: var(--duo-green);">✨</div>
+                            <h3 style="color: white; margin:0;">SPARK</h3>
+                        </div>
+                        <div class="project-body">
+                            <p>An innovative iOS application designed to ignite productivity through gamified task management.</p>
+                            <div class="project-tags">
+                                <span class="tag">SwiftUI</span>
+                                <span class="tag">iOS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card animate-pop delay-2">
+                        <div class="project-header" style="background: var(--duo-purple-shadow);">
+                            <div class="project-icon" style="background: var(--duo-purple);">🤖</div>
+                            <h3 style="color: white; margin:0;">AI Chatbot Assistant</h3>
+                        </div>
+                        <div class="project-body">
+                            <p>A conversational AI interface built to handle complex customer queries with natural language processing.</p>
+                            <div class="project-tags">
+                                <span class="tag">NLP</span>
+                                <span class="tag">ML</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2>Let's Connect!</h2>
+                <div class="contact-container animate-pop">
+                    <form id="contactForm" onsubmit="return handleFormSubmit(event)">
+                        <div class="form-group">
+                           <label for="name" style="font-weight: 700; margin-bottom: 8px; display: block;">Your Name</label>
+                            <input type="text" id="name" class="form-input" placeholder="e.g., Duo the Owl" required>
+                        </div>
+                        <div class="form-group">
+                             <label for="email" style="font-weight: 700; margin-bottom: 8px; display: block;">Your Email</label>
+                            <input type="email" id="email" class="form-input" placeholder="name@example.com" required>
+                        </div>
+                        <div class="form-group">
+                             <label for="message" style="font-weight: 700; margin-bottom: 8px; display: block;">Message</label>
+                            <textarea id="message" class="form-input" placeholder="Say hello!" required></textarea>
+                        </div>
+                        <button type="submit" class="duo-btn btn-primary" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+
+                <div class="social-links animate-pop delay-1">
+                    <a href="#" class="social-btn" style="background: #0077b5;">in</a> <a href="#" class="social-btn" style="background: #333;">🐙</a> <a href="#" class="social-btn" style="background: #1da1f2;">🐦</a> <a href="mailto:your@email.com" class="social-btn" style="background: var(--duo-green);">✉️</a> </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Made with 🧡 and a bit of ✨ by Ashutosh Srivastava © 2023</p>
+        </div>
+    </footer>
+
+    <div class="confetti-container" id="confetti"></div>
+
+    <script>
+        // Simple Intersection Observer to trigger animations when elements scroll into view
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-pop').forEach((el) => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Playful Form Submit Handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const btn = event.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "🎉 Message Sent! 🎉";
+            btn.style.backgroundColor = var(--duo-yellow);
+            btn.style.boxShadow = `0 4px 0 var(--duo-yellow-shadow)`;
+            
+            triggerConfetti();
+
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.backgroundColor = '';
+                btn.style.boxShadow = '';
+                event.target.reset();
+            }, 3000);
+            return false;
+        }
+
+        // Extremely simple confetti effect
+        function triggerConfetti() {
+            const container = document.getElementById('confetti');
+            container.style.display = 'block';
+            container.innerHTML = '';
+            const colors = ['var(--duo-green)', 'var(--duo-blue)', 'var(--duo-yellow)', 'var(--duo-peach)', 'var(--duo-purple)'];
+
+            for(let i=0; i<50; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animation = `bounce ${1 + Math.random()}s ease-in-out infinite, popIn 0.5s forwards`;
+                piece.style.animationDelay = `${Math.random() * 0.5}s`;
+                container.appendChild(piece);
+            }
+            
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
