@@ -1,0 +1,192 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 24px 0;
+    /* Taller navbar */
+    transition: all 0.3s var(--ease-out);
+}
+
+.navbar.scrolled {
+    background: rgba(var(--c-surface), 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 16px 0;
+    box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .navbar.scrolled {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(5, 5, 5, 0.85);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+    position: relative;
+    /* Context for absolute centering */
+}
+
+/* Brand Area */
+.nav-brand-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1002;
+    /* Above nav links if they overlap */
+}
+
+.brand-logo {
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+    color: var(--c-text-main);
+    position: relative;
+}
+
+/* Centered Navigation Links */
+.nav-links {
+    display: flex;
+    gap: 8px;
+    background: rgba(var(--c-surface), 0.6);
+    padding: 8px 10px;
+    /* Bigger padding */
+    border-radius: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+
+    /* Absolute Centering Logic */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+[data-theme="dark"] .nav-links {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item {
+    position: relative;
+    padding: 12px 28px;
+    /* Bigger touch targets */
+    border-radius: 100px;
+    color: var(--c-text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    /* Larger font */
+    transition: all 0.3s var(--ease-out);
+}
+
+.nav-item:hover {
+    color: var(--c-text-main);
+    background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] .nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item.active {
+    background: var(--c-brand-primary);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(99, 91, 255, 0.3);
+}
+
+/* Theme Toggle */
+.theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--c-text-main);
+    transition: transform 0.5s var(--ease-spring), background 0.2s;
+    z-index: 1002;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: rotate(30deg) scale(1.1);
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Navigation */
+.mobile-toggle {
+    display: none;
+    font-size: 1.5rem;
+    color: var(--c-text-main);
+    z-index: 1002;
+}
+
+/* Mobile Formatting - Reset Centering */
+@media (max-width: 1024px) {
+    .nav-container {
+        padding: 0 20px;
+    }
+
+    .mobile-toggle {
+        display: block;
+        margin-left: auto;
+        /* Push to right next to theme toggle? Or replace theme toggle pos? */
+        /* Theme toggle usually stays, maybe mobile toggle pushes it? */
+    }
+
+    /* Reset centered positioning for mobile sidebar */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: auto;
+        /* Reset left */
+        transform: none;
+        /* Reset center transform */
+        height: 100vh;
+        width: 300px;
+        background: var(--c-surface);
+        display: flex;
+        flex-direction: column;
+        padding: 100px 30px;
+        gap: 16px;
+        transform: translateX(100%);
+        /* Animation start state */
+        transition: transform 0.4s var(--ease-spring);
+        z-index: 1001;
+        border-left: 1px solid var(--c-border);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+        border-radius: 0;
+    }
+
+    .nav-links.open {
+        transform: translateX(0);
+    }
+
+    .nav-item {
+        font-size: 1.2rem;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--c-border);
+        border-radius: 0;
+        background: transparent !important;
+        color: var(--c-text-muted);
+        text-align: left;
+    }
+
+    .nav-item.active {
+        box-shadow: none;
+        color: var(--c-brand-primary) !important;
+        border-color: var(--c-brand-primary);
+    }
+}

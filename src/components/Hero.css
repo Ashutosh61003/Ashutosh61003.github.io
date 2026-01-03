@@ -1,0 +1,134 @@
+.hero {
+    position: relative;
+    min-height: 90vh;
+    /* Consistent tall hero */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 120px 20px 60px;
+}
+
+/* Simulated Video/Mesh Background */
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: var(--c-bg);
+    /* Fallback */
+    background-image: var(--gradient-mesh);
+    background-size: 150% 150%;
+    animation: meshFlow 20s ease-in-out infinite alternate;
+}
+
+/* Optional overlay to soften it */
+.hero-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, transparent 20%, var(--c-bg) 90%);
+    opacity: 0.8;
+}
+
+@keyframes meshFlow {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+.hero-content {
+    z-index: 2;
+    max-width: 900px;
+    perspective: 1000px;
+    /* For 3D Tilt of text if desired */
+    /* Remove conflicting transforms if handled by JS */
+}
+
+.hero-title {
+    font-size: var(--text-hero);
+    font-weight: 800;
+    line-height: 1.25;
+    /* Increased from 1.1 */
+    margin-bottom: var(--space-md);
+    letter-spacing: -0.04em;
+    text-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.2em;
+    /* Ensure descenders aren't clipped */
+}
+
+.hero-subtitle {
+    font-size: var(--text-h2);
+    color: var(--c-text-muted);
+    font-weight: 400;
+    margin-bottom: var(--space-lg);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Scroll Arrow with Bounce */
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: floatArrow 2s infinite ease-in-out;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.scroll-indicator:hover {
+    opacity: 1;
+}
+
+@keyframes floatArrow {
+
+    0%,
+    100% {
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        transform: translate(-50%, 10px);
+    }
+}
+
+/* Parallax Floaters */
+.hero-floater {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    /* Soft bloom look */
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.floater-1 {
+    top: 20%;
+    left: 10%;
+    width: 400px;
+    height: 400px;
+    background: var(--c-brand-primary);
+}
+
+.floater-2 {
+    bottom: 20%;
+    right: 10%;
+    width: 300px;
+    height: 300px;
+    background: var(--c-accent-warm);
+}

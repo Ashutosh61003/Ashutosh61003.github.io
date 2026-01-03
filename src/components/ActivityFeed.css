@@ -1,0 +1,118 @@
+.activity-feed-section {
+    padding: var(--space-xl) 0;
+    overflow: hidden;
+}
+
+.activity-feed-title {
+    margin-bottom: var(--space-md);
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding-left: var(--space-md);
+    /* Align with swiper padding */
+}
+
+.feed-scroll-container {
+    display: flex;
+    gap: var(--space-md);
+    overflow-x: auto;
+    padding: var(--space-md);
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.feed-scroll-container::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.feed-item {
+    flex: 0 0 340px;
+    /* Increased from 280px */
+    min-height: 200px;
+    /* Enforce height */
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    /* Larger radius */
+    padding: var(--space-lg);
+    /* Increased padding */
+    scroll-snap-align: start;
+    transition: transform 0.3s ease, background 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.feed-item:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+}
+
+.feed-type {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 100px;
+}
+
+.type-thought {
+    background: rgba(255, 149, 0, 0.2);
+    color: var(--c-orange);
+}
+
+.type-project {
+    background: rgba(156, 39, 176, 0.2);
+    color: var(--c-purple);
+}
+
+.type-photo {
+    background: rgba(216, 27, 96, 0.2);
+    color: var(--c-crimson);
+}
+
+.type-activity {
+    background: rgba(0, 191, 165, 0.2);
+    color: var(--c-teal);
+}
+
+.feed-time {
+    font-size: 0.75rem;
+    color: var(--c-text-muted);
+}
+
+.feed-content {
+    font-size: 1.1rem;
+    /* Increased */
+    line-height: 1.6;
+    color: var(--c-white);
+    margin-top: auto;
+    /* Push to bottom if using flex column */
+}
+
+/* Decoration line */
+.feed-item::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0%;
+    background: var(--c-primary);
+    transition: width 0.3s ease;
+}
+
+.feed-item:hover::after {
+    width: 100%;
+}

@@ -1,0 +1,88 @@
+/* Ultra-Modern Design System - Stripe/Apple Inspired */
+:root {
+  /* Core Palette - Stripe-like */
+  --c-brand-dark: #0A2540;
+  /* Deep Royal Blue */
+  --c-brand-primary: #635BFF;
+  /* Indigo */
+  --c-brand-light: #00D4FF;
+  /* Cyan */
+
+  --c-accent-warm: #FF7E5F;
+  /* Warm Orange/Pink */
+  --c-accent-glow: #FEB47B;
+  /* Soft Gold */
+
+  /* Neutrals */
+  --c-bg: #F6F9FC;
+  /* Very light cool grey */
+  --c-surface: #FFFFFF;
+  --c-text-main: #0A2540;
+  --c-text-muted: #425466;
+  --c-border: #E6EBF1;
+
+  /* Mesh Gradients */
+  --gradient-mesh: radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+
+  --gradient-hero: linear-gradient(135deg, #0A2540 0%, #15193B 100%);
+  --gradient-text: linear-gradient(120deg, #635BFF, #00D4FF);
+
+  /* Spacing - Fluid */
+  --space-xs: 0.25rem;
+  --space-sm: 0.75rem;
+  --space-md: 1.5rem;
+  --space-lg: 3rem;
+  --space-xl: 6rem;
+
+  /* Typography - Apple-style Hierarchy */
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --text-hero: clamp(3rem, 6vw, 5rem);
+  --text-h1: clamp(2rem, 4vw, 3rem);
+  --text-h2: 1.75rem;
+  --text-body: 1.05rem;
+
+  /* Elevation & Shadows */
+  --shadow-sm: 0 2px 5px rgba(50, 50, 93, 0.1), 0 1px 0 rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 13px 27px -5px rgba(50, 50, 93, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 40px rgba(99, 91, 255, 0.3);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  /* New Theme Variables for Glass/Gradients */
+  --bg-gradient: radial-gradient(circle at 10% 20%, #F0F4F8 0%, #E6EBF1 90%);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-text: #0A2540;
+  --input-bg: rgba(255, 255, 255, 0.5);
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-spring: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+/* Dark Mode Overrides - Deep & Rich */
+[data-theme="dark"] {
+  --c-bg: #050505;
+  --c-surface: #121212;
+  --c-text-main: #FFFFFF;
+  --c-text-muted: #A0A0A0;
+  --c-border: #2A2A2A;
+
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 13px 27px -5px rgba(0, 0, 0, 0.5);
+
+  /* Dark Gradients & Glass */
+  --bg-gradient: radial-gradient(circle at 10% 20%, #0a0f2c 0%, #050505 90%);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-text: #FFFFFF;
+  --input-bg: rgba(0, 0, 0, 0.2);
+}

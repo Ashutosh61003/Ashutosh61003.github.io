@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import './variables.css';
+
+/* Advanced Reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: var(--font-body);
+    background-color: var(--c-bg);
+    color: var(--c-text-main);
+    transition: background-color 0.5s var(--ease-out), color 0.5s var(--ease-out);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+#root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Typography Hierarchy */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--c-text-main);
+    line-height: 1.2;
+}
+
+.text-hero {
+    font-size: var(--text-hero);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+}
+
+.text-gradient {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+p {
+    font-size: var(--text-body);
+    color: var(--c-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+    user-select: none;
+}
+
+/* Utilities */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+}
+
+.glass-panel {
+    background: rgba(var(--c-surface), 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--c-text-muted);
+    border-radius: 100px;
+    opacity: 0.5;
+}
+
+/* Liquid Blob & Interactive Utilities */
+/* Liquid Blob & Interactive Utilities */
+h1.hero-title {
+    /* Stable on hover */
+    transform: none;
+}
+
+
+.btn-liquid {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-liquid::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: var(--c-brand-primary);
+    border-radius: 40%;
+    opacity: 0.1;
+    transform: rotate(0deg);
+    transition: transform 0.5s;
+    z-index: 0;
+}
+
+.btn-liquid:hover::after {
+    transform: rotate(45deg) scale(1.2);
+}
+
+/* --- Global Background Orbs --- */
+.page-container {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+.page-container::before,
+.page-container::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.page-container::before {
+    width: 600px;
+    height: 600px;
+    background: var(--c-brand-primary);
+    top: -20%;
+    right: -10%;
+    animation: drift 10s ease-in-out infinite alternate;
+}
+
+.page-container::after {
+    width: 500px;
+    height: 500px;
+    background: var(--c-accent-warm);
+    bottom: -10%;
+    left: -10%;
+    animation: drift 15s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes drift {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(50px, 50px);
+    }
+}

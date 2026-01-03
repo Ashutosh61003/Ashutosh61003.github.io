@@ -1,0 +1,53 @@
+/* Hide default cursor on desktops */
+@media (min-width: 1024px) {
+    body {
+        cursor: none;
+    }
+
+    a,
+    button,
+    input,
+    textarea,
+    .card,
+    .nav-item {
+        cursor: none;
+    }
+}
+
+.cursor-dot,
+.cursor-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--c-brand-primary);
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--c-brand-primary);
+    opacity: 0.5;
+    transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+
+/* Hover States */
+body.hovering .cursor-outline {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(99, 91, 255, 0.1);
+    border-color: transparent;
+}
+
+body.hovering .cursor-dot {
+    opacity: 0;
+    /* Hide dot inside big bubble */
+}

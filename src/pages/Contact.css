@@ -1,0 +1,311 @@
+/* --- Supercharged Contact Page --- */
+.contact-page {
+    /* Duotone Gradient Background */
+    /* Duotone Gradient Background */
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 60px;
+    padding-top: 100px;
+    padding-bottom: 60px;
+}
+
+
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 40px;
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (max-width: 960px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
+}
+
+/* --- Glass Profile Card --- */
+.profile-section {
+    position: sticky;
+    top: 120px;
+    perspective: 1000px;
+}
+
+.profile-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    /* Subtle border */
+    border-radius: 32px;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    /* Inner border light */
+    transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+/* Neon Glow on hover */
+.profile-card:hover {
+    border-color: rgba(var(--c-brand-primary), 0.3);
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(var(--c-brand-primary), 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF7E5F, #feb47b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+    box-shadow: 0 10px 30px rgba(255, 126, 95, 0.4);
+    position: relative;
+    z-index: 2;
+    transform: translateZ(20px);
+    /* 3D Lift */
+    border: 4px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-info {
+    transform: translateZ(10px);
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.social-row {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.social-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--c-text-muted);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Bouncy */
+}
+
+.social-icon:hover {
+    background: white;
+    color: black;
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* --- Chat Interface --- */
+.chat-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.chat-date {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--c-text-muted);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.profile-bio-text {
+    font-size: 0.95rem;
+    color: var(--c-text-muted);
+    line-height: 1.6;
+}
+
+/* Bubbles */
+.message {
+    display: flex;
+    width: 100%;
+}
+
+.message-received {
+    justify-content: flex-start;
+}
+
+.message-sent {
+    justify-content: flex-end;
+}
+
+.message-bubble {
+    padding: 16px 24px;
+    border-radius: 24px;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    max-width: 85%;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+}
+
+.message-received .message-bubble {
+    background: var(--glass-bg);
+    color: var(--c-text-main);
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--glass-border);
+}
+
+.message-sent .message-bubble {
+    background: linear-gradient(135deg, var(--c-brand-primary), #4facfe);
+    color: white;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 8px 25px rgba(6, 123, 239, 0.3);
+}
+
+/* --- Chat Form (Neumorphism Inputs) --- */
+.chat-input-area {
+    margin-top: 10px;
+
+    .chat-input-area {
+        margin-top: 10px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(30px);
+        padding: 24px;
+        border-radius: 30px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        transform: translateZ(5px);
+    }
+
+    .chat-input {
+        width: 100%;
+        background: var(--input-bg);
+        border: 1px solid var(--glass-border);
+        padding: 16px 24px;
+        border-radius: 16px;
+        color: var(--c-text-main);
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .chat-input:focus {
+        outline: none;
+        background: rgba(0, 0, 0, 0.4);
+        border-color: var(--c-brand-primary);
+        box-shadow:
+            inset 0 2px 5px rgba(0, 0, 0, 0.3),
+            0 0 0 4px rgba(6, 123, 239, 0.15);
+        transform: scale(1.02);
+    }
+
+    .chat-textarea {
+        resize: none;
+        min-height: 60px;
+        border-radius: 20px;
+        padding-right: 60px;
+        /* Room for button */
+    }
+
+    /* Pulse Send Button */
+    .chat-send-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .chat-send-btn {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--c-brand-primary), #00c6ff);
+        color: white;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 198, 255, 0.3);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 10;
+    }
+
+    .chat-send-btn:hover {
+        transform: scale(1.15) rotate(-10deg);
+        box-shadow: 0 10px 25px rgba(0, 198, 255, 0.5);
+    }
+
+    .chat-send-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* Success State */
+    .success-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+
+    .success-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .success-icon {
+        width: 60px;
+        height: 60px;
+        background: #00e676;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+        0% {
+            transform: scale(0);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
