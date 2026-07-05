@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, BarChart3, Briefcase, FolderOpen, Mail, UsersRound } from 'lucide-react';
+import { ArrowUpRight, BarChart3, Briefcase, ExternalLink, FolderOpen, Mail, UsersRound, X } from 'lucide-react';
 import Folder from '../components/Folder';
 import ProfileCard from '../components/ProfileCard';
 import './Home.css';
@@ -128,6 +128,9 @@ const certifications = [
 ];
 
 const Home = () => {
+    const [activeHighlight, setActiveHighlight] = useState(null);
+    const [selectedCertificate, setSelectedCertificate] = useState(null);
+
     return (
         <main className="home-page" aria-label="Home page">
             <section className="home-hero" aria-labelledby="home-title">
@@ -139,20 +142,20 @@ const Home = () => {
                     </p>
                     <div className="home-cta-row">
                         <a href="/projects">
-                            View projects
+                            Projects
                             <ArrowUpRight size={18} />
                         </a>
                         <a href="/work">
-                            See work
+                            Work
                             <Briefcase size={18} />
+                        </a>
+                        <a href="/contact">
+                            Contact
+                            <Mail size={18} />
                         </a>
                         <a href="/files/AshutoshSrivastavaResume.pdf" target="_blank" rel="noreferrer">
                             Resume
                             <ArrowUpRight size={18} />
-                        </a>
-                        <a href="/contact">
-                            Contact me
-                            <Mail size={18} />
                         </a>
                     </div>
                 </div>
@@ -178,11 +181,19 @@ const Home = () => {
             </section>
 
             <section className="home-stats" aria-label="Portfolio highlights">
-                {highlights.map((item) => (
-                    <article key={item.label}>
-                        <strong>{item.value}</strong>
-                        <span>{item.label}</span>
-                    </article>
+                {highlights.map((item, index) => (
+                    <button
+                        className={`home-stat-card ${activeHighlight === index ? 'is-flipped' : ''}`}
+                        key={item.label}
+                        type="button"
+                        aria-label={`${item.value}: ${item.label}`}
+                        onClick={() => setActiveHighlight(activeHighlight === index ? null : index)}
+                    >
+                        <span className="home-stat-face home-stat-front">
+                            <strong>{item.value}</strong>
+                        </span>
+                        <span className="home-stat-face home-stat-back">{item.label}</span>
+                    </button>
                 ))}
             </section>
 
@@ -264,7 +275,13 @@ const Home = () => {
 
                 <div className="certification-grid">
                     {certifications.map((cert) => (
-                        <a className="certification-card" href={cert.href} target="_blank" rel="noreferrer" key={cert.title}>
+                        <button
+                            className="certification-card"
+                            type="button"
+                            key={cert.title}
+                            aria-label={`View details for ${cert.title}`}
+                            onClick={() => setSelectedCertificate(cert)}
+                        >
                             <span className={`cert-logo cert-logo-${cert.icon}`} aria-hidden="true">
                                 <img src={cert.logo} alt="" />
                             </span>
@@ -276,9 +293,49 @@ const Home = () => {
                                     <small key={tag}>{tag}</small>
                                 ))}
                             </div>
-                        </a>
+                        </button>
                     ))}
                 </div>
+
+                {selectedCertificate && (
+                    <div
+                        className="certificate-modal-overlay"
+                        role="presentation"
+                        onClick={() => setSelectedCertificate(null)}
+                    >
+                        <section
+                            className="certificate-modal"
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="certificate-modal-title"
+                            onClick={(event) => event.stopPropagation()}
+                        >
+                            <button
+                                className="certificate-modal-close"
+                                type="button"
+                                aria-label="Close certificate details"
+                                onClick={() => setSelectedCertificate(null)}
+                            >
+                                <X size={20} />
+                            </button>
+                            <span className={`cert-logo cert-logo-${selectedCertificate.icon}`} aria-hidden="true">
+                                <img src={selectedCertificate.logo} alt="" />
+                            </span>
+                            <span className="cert-provider">{selectedCertificate.provider}</span>
+                            <h3 id="certificate-modal-title">{selectedCertificate.title}</h3>
+                            <p>{selectedCertificate.summary}</p>
+                            <div className="cert-tags">
+                                {selectedCertificate.tags.map((tag) => (
+                                    <small key={tag}>{tag}</small>
+                                ))}
+                            </div>
+                            <a className="certificate-view-link" href={selectedCertificate.href} target="_blank" rel="noreferrer">
+                                View certificate
+                                <ExternalLink size={17} />
+                            </a>
+                        </section>
+                    </div>
+                )}
             </section>
 
             <nav className="home-flowing-menu" aria-label="Featured navigation">

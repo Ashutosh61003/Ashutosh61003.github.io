@@ -13,7 +13,8 @@
 }
 
 .folder:hover,
-.folder:focus-visible {
+.folder:focus-visible,
+.folder.is-open {
     transform: translateY(-8px);
 }
 
@@ -70,23 +71,27 @@
 }
 
 .folder:hover .paper,
-.folder:focus-visible .paper {
+.folder:focus-visible .paper,
+.folder.is-open .paper {
     transform: translate(-50%, 0%);
 }
 
 .folder:hover .paper:nth-child(1),
-.folder:focus-visible .paper:nth-child(1) {
+.folder:focus-visible .paper:nth-child(1),
+.folder.is-open .paper:nth-child(1) {
     transform: translate(-120%, -70%) rotateZ(-15deg);
 }
 
 .folder:hover .paper:nth-child(2),
-.folder:focus-visible .paper:nth-child(2) {
+.folder:focus-visible .paper:nth-child(2),
+.folder.is-open .paper:nth-child(2) {
     height: 80%;
     transform: translate(10%, -70%) rotateZ(15deg);
 }
 
 .folder:hover .paper:nth-child(3),
-.folder:focus-visible .paper:nth-child(3) {
+.folder:focus-visible .paper:nth-child(3),
+.folder.is-open .paper:nth-child(3) {
     height: 80%;
     transform: translate(-50%, -100%) rotateZ(5deg);
 }
@@ -109,12 +114,14 @@
 }
 
 .folder:hover .folder__front,
-.folder:focus-visible .folder__front {
+.folder:focus-visible .folder__front,
+.folder.is-open .folder__front {
     transform: skew(15deg) scaleY(0.6);
 }
 
 .folder:hover .right,
-.folder:focus-visible .right {
+.folder:focus-visible .right,
+.folder.is-open .right {
     transform: skew(-15deg) scaleY(0.6);
 }
 

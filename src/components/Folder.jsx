@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './Folder.css';
 
 const darkenColor = (hex, percent) => {
@@ -15,6 +16,7 @@ const darkenColor = (hex, percent) => {
 };
 
 const Folder = ({ color = '#168eea', size = 1, items = [], className = '' }) => {
+    const [isOpen, setIsOpen] = useState(false);
     const papers = items.slice(0, 3);
     while (papers.length < 3) papers.push(null);
 
@@ -28,7 +30,21 @@ const Folder = ({ color = '#168eea', size = 1, items = [], className = '' }) => 
 
     return (
         <div className={`folder-wrap ${className}`.trim()} style={{ transform: `scale(${size})` }}>
-            <div className="folder" style={folderStyle} tabIndex={0} role="img" aria-label="Portfolio folder">
+            <div
+                className={`folder ${isOpen ? 'is-open' : ''}`}
+                style={folderStyle}
+                tabIndex={0}
+                role="button"
+                aria-label={isOpen ? 'Close portfolio folder' : 'Open portfolio folder'}
+                aria-pressed={isOpen}
+                onClick={() => setIsOpen((open) => !open)}
+                onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        setIsOpen((open) => !open);
+                    }
+                }}
+            >
                 <div className="folder__back">
                     {papers.map((item, index) => (
                         <div className={`paper paper-${index + 1}`} key={index}>

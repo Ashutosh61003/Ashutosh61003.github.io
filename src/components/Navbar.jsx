@@ -8,19 +8,38 @@ const Navbar = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const location = useLocation();
     const navRef = useRef(null);
+    const lastScrollYRef = useRef(0);
+
+    const isMobileViewport = () => window.matchMedia?.('(max-width: 760px)').matches;
 
     useEffect(() => {
         const handleScroll = () => {
             if (document.body.classList.contains('project-modal-open')) return;
-            setScrolled(window.scrollY > 80);
+            const currentY = window.scrollY;
+            const delta = currentY - lastScrollYRef.current;
+
+            if (currentY <= 8) {
+                setScrolled(false);
+                setIsExpanded(false);
+            } else if (delta > 2) {
+                setScrolled(true);
+                setIsExpanded(false);
+            } else if (delta < -2) {
+                setScrolled(false);
+                setIsExpanded(false);
+            }
+
+            lastScrollYRef.current = currentY;
         };
         const handleWheel = (event) => {
             if (document.body.classList.contains('project-modal-open')) return;
             if (event.deltaY > 12) {
                 setScrolled(true);
+                setIsExpanded(false);
             }
-            if (event.deltaY < -12 && window.scrollY <= 8) {
+            if (event.deltaY < -12) {
                 setScrolled(false);
+                setIsExpanded(false);
             }
         };
 
@@ -34,12 +53,15 @@ const Navbar = () => {
             const delta = touchStartY - currentY;
             if (delta > 12) {
                 setScrolled(true);
+                setIsExpanded(false);
             }
-            if (delta < -12 && window.scrollY <= 8) {
+            if (delta < -12) {
                 setScrolled(false);
+                setIsExpanded(false);
             }
         };
 
+        lastScrollYRef.current = window.scrollY;
         handleScroll();
         window.addEventListener('scroll', handleScroll);
         window.addEventListener('wheel', handleWheel, { passive: true });
@@ -103,8 +125,10 @@ const Navbar = () => {
                 className="nav-shell"
                 onMouseEnter={() => setIsExpanded(true)}
                 onMouseLeave={() => setIsExpanded(false)}
-                onClick={() => {
-                    if (scrolled) {
+                onClickCapture={(event) => {
+                    if (scrolled && !isExpanded && isMobileViewport()) {
+                        event.preventDefault();
+                        event.stopPropagation();
                         setIsExpanded(true);
                     }
                 }}
