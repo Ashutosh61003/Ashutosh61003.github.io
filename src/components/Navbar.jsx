@@ -63,6 +63,29 @@ const Navbar = () => {
         setScrolled(window.scrollY > 80);
     }, [location.pathname]);
 
+    useEffect(() => {
+        if (!isExpanded || !scrolled) return;
+
+        const handlePointerDown = (event) => {
+            if (!navRef.current?.contains(event.target)) {
+                setIsExpanded(false);
+            }
+        };
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                setIsExpanded(false);
+            }
+        };
+
+        document.addEventListener('pointerdown', handlePointerDown);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('pointerdown', handlePointerDown);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isExpanded, scrolled]);
+
     const links = [
         { name: 'Home', path: '/', Icon: Home },
         { name: 'Projects', path: '/projects', Icon: FolderKanban },
@@ -80,6 +103,11 @@ const Navbar = () => {
                 className="nav-shell"
                 onMouseEnter={() => setIsExpanded(true)}
                 onMouseLeave={() => setIsExpanded(false)}
+                onClick={() => {
+                    if (scrolled) {
+                        setIsExpanded(true);
+                    }
+                }}
                 onFocus={() => setIsExpanded(true)}
                 onBlur={(event) => {
                     if (!event.currentTarget.contains(event.relatedTarget)) {
