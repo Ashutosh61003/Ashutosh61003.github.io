@@ -1,0 +1,174 @@
+:root {
+    --font-display: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-body: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --royal-text: #061f6f;
+    --royal-text-muted: rgba(6, 31, 111, 0.76);
+    --c-text-main: #061f6f;
+    --c-text-muted: rgba(6, 31, 111, 0.76);
+    --glass-text: #061f6f;
+}
+
+html,
+body,
+body *,
+button,
+input,
+textarea,
+select {
+    font-family: var(--font-body) !important;
+    letter-spacing: 0.027em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.brand-logo,
+.nav-item {
+    font-family: var(--font-display) !important;
+    color: var(--royal-text) !important;
+    letter-spacing: 0.0234em !important;
+}
+
+body,
+main,
+.home-page,
+.work-page,
+.contact-page,
+.identity-page,
+.thoughts-page,
+.photography-page {
+    color: var(--royal-text) !important;
+}
+
+.projects-page {
+    color: var(--royal-text) !important;
+}
+
+body :is(button, input, textarea, select),
+.slide-send :is(span, svg),
+.project-loop-label,
+.project-loop-label small,
+.item__label,
+.item__label small,
+.enlarge__copy,
+.enlarge__copy span,
+.enlarge__copy h2,
+.enlarge__copy p,
+.photo-chip,
+.photo-location,
+.btn-close {
+    color: var(--royal-text) !important;
+}
+
+.home-page :is(h1, h2, h3, h4, h5, h6, p, span, strong, small, a, li),
+.work-page :is(h1, h2, h3, h4, h5, h6, p, span, strong, small, a, li),
+.contact-page :is(h1, h2, h3, h4, h5, h6, p, span, strong, small, a, li, label),
+.identity-page :is(h1, h2, h3, h4, h5, h6, p, span, strong, small, a, li),
+.thoughts-page :is(h1, h2, h3, h4, h5, h6, p, span, strong, small, a, li),
+.photography-page :is(h1, h2, h3, h4, h5, h6, p, span, strong, small, a, li) {
+    color: var(--royal-text) !important;
+    letter-spacing: 0.027em !important;
+}
+
+.projects-page :is(h1, h2, h3, h4, h5, h6, p, span, strong, small, a, li),
+.projects-page .project-loop-label,
+.projects-page .project-loop-label small,
+.projects-page .project-loop-label strong,
+.projects-page .product-image-expand-title {
+    color: var(--royal-text) !important;
+    -webkit-text-fill-color: var(--royal-text) !important;
+    letter-spacing: 0.027em !important;
+}
+
+.projects-page .project-loop-label strong {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    opacity: 1;
+}
+
+.projects-page :is(.projects-hero h1, .project-lane-heading h2, .glass-blog-card-copy h3, .project-preview-copy h2, .project-detail-section h3, .project-detail-action, .project-detail-action svg) {
+    color: var(--royal-text) !important;
+    -webkit-text-fill-color: var(--royal-text) !important;
+}
+
+.projects-page .glass-blog-card-tags span {
+    color: rgba(255, 255, 255, 0.75) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.projects-page :is(.projects-hero p, .glass-blog-card-copy p, .project-preview-copy p, .project-detail-section li, .glass-blog-card-author small, .glass-blog-card-time) {
+    color: var(--royal-text-muted) !important;
+    -webkit-text-fill-color: var(--royal-text-muted) !important;
+}
+
+.projects-page :is(.projects-eyebrow, .project-lane-heading span, .project-lane-heading small, .project-preview-hero-copy span, .project-detail-meta small) {
+    color: rgba(6, 31, 111, 0.68) !important;
+    -webkit-text-fill-color: rgba(6, 31, 111, 0.68) !important;
+}
+
+.contact-page .product-image-label {
+    color: rgba(255, 255, 255, 0.75) !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.pc-card :is(.pc-handle, .pc-status, .pc-contact-btn) {
+    color: rgba(255, 255, 255, 0.9) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.pc-card .pc-details :is(h3, p) {
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.home-clean-profile-card .pc-details :is(h3, p) {
+    color: rgba(84, 93, 105, 0.82) !important;
+    -webkit-text-fill-color: rgba(84, 93, 105, 0.82) !important;
+}
+
+.home-page :is(input, textarea, select),
+.work-page :is(input, textarea, select),
+.contact-page :is(input, textarea, select) {
+    color: var(--royal-text) !important;
+    caret-color: var(--royal-text);
+}
+
+.home-page ::placeholder,
+.work-page ::placeholder,
+.contact-page ::placeholder {
+    color: rgba(6, 31, 111, 0.54) !important;
+}
+
+.product-image-expand-title,
+.dome-gallery-title,
+.item__label strong,
+.hero-title .gradient-text,
+.photography-title {
+    color: var(--royal-text) !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: var(--royal-text) !important;
+}
+
+.projects-page .product-image-label,
+.contact-page .product-image-label {
+    color: rgba(255, 255, 255, 0.75) !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.75) !important;
+    opacity: 1 !important;
+}
+
+.flow-marquee,
+.flow-marquee b {
+    color: var(--royal-text) !important;
+}

@@ -1,0 +1,241 @@
+.glass-blog-card {
+    width: clamp(284px, 24vw, 390px);
+    min-width: clamp(284px, 24vw, 390px);
+    height: 100%;
+}
+
+.glass-blog-card-shell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.46);
+    border-radius: 24px;
+    background: rgba(238, 250, 255, 0.26);
+    box-shadow:
+        0 18px 42px rgba(255, 255, 255, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.52);
+    backdrop-filter: blur(22px) saturate(145%);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    color: #061f6f;
+    text-align: left;
+    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.glass-blog-card-shell:hover,
+.glass-blog-card-shell:focus-visible {
+    transform: translateY(-4px);
+    border-color: rgba(29, 137, 207, 0.5);
+    box-shadow:
+        0 24px 54px rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.22) inset;
+    outline: none;
+}
+
+.glass-blog-card-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.glass-blog-card-media img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transform: scale(1.01);
+    transition: transform 500ms ease;
+}
+
+.glass-blog-card-shell:hover .glass-blog-card-media img,
+.glass-blog-card-shell:focus-visible .glass-blog-card-media img {
+    transform: scale(1.1);
+}
+
+.glass-blog-card-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0) 22%, rgba(12, 39, 58, 0.72) 100%),
+        radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.32), transparent 34%);
+    opacity: 0.82;
+    transition: opacity 240ms ease;
+}
+
+.glass-blog-card-shell:hover .glass-blog-card-gradient,
+.glass-blog-card-shell:focus-visible .glass-blog-card-gradient {
+    opacity: 0.62;
+}
+
+.glass-blog-card-tags {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 2;
+}
+
+.glass-blog-card-tags span {
+    max-width: 150px;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+    color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 0.72rem;
+    font-weight: 820;
+    line-height: 1;
+    padding: 8px 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.glass-blog-card-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 3;
+    background: rgba(18, 84, 128, 0.22);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 260ms ease;
+}
+
+.glass-blog-card-shell:hover .glass-blog-card-overlay,
+.glass-blog-card-shell:focus-visible .glass-blog-card-overlay {
+    opacity: 1;
+}
+
+.glass-blog-card-overlay span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    border-radius: 999px;
+    background: #168eea;
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 850;
+    padding: 0 18px;
+    box-shadow: 0 16px 32px rgba(22, 142, 234, 0.28);
+}
+
+.glass-blog-card-copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px;
+}
+
+.glass-blog-card-copy h3 {
+    color: #061f6f;
+    font-size: clamp(1.12rem, 1.45vw, 1.45rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    margin: 0;
+    transition: color 180ms ease;
+}
+
+.glass-blog-card-shell:hover h3,
+.glass-blog-card-shell:focus-visible h3 {
+    color: #096da8;
+}
+
+.glass-blog-card-copy p {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: rgba(6, 31, 111, 0.76);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin: 8px 0 0;
+}
+
+.glass-blog-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.42);
+    padding-top: 14px;
+}
+
+.glass-blog-card-author {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.glass-blog-card-author img,
+.glass-blog-card-author > span {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border: 1px solid rgba(255, 255, 255, 0.46);
+    border-radius: 50%;
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.34);
+}
+
+.glass-blog-card-author > span {
+    display: grid;
+    place-items: center;
+    color: #061f6f;
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+
+.glass-blog-card-author div {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.glass-blog-card-author strong,
+.glass-blog-card-author small,
+.glass-blog-card-time {
+    font-size: 0.74rem;
+    line-height: 1.22;
+}
+
+.glass-blog-card-author strong {
+    max-width: 132px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #061f6f;
+    font-weight: 850;
+}
+
+.glass-blog-card-author small,
+.glass-blog-card-time {
+    color: rgba(6, 31, 111, 0.62);
+    font-weight: 720;
+}
+
+.glass-blog-card-time {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+    .glass-blog-card {
+        width: min(82vw, 340px);
+        min-width: min(82vw, 340px);
+    }
+}

@@ -1,177 +1,299 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Code, Camera, User, Calendar, Brain, Smartphone, Monitor } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ArrowUpRight, BarChart3, Briefcase, FolderOpen, Mail, UsersRound } from 'lucide-react';
+import Folder from '../components/Folder';
+import ProfileCard from '../components/ProfileCard';
 import './Home.css';
 
-gsap.registerPlugin(ScrollTrigger);
+const highlights = [
+    { value: '10+', label: 'Products worked on and shipped' },
+    { value: '2', label: 'Product internships' },
+    { value: '20+', label: 'User interviews' },
+    { value: '5K+', label: 'Launch campaign views' }
+];
+
+const stackItems = [
+    {
+        eyebrow: 'Flurn',
+        href: '/work#flurn-work',
+        title: 'Built EdTech product systems for teachers and operations.',
+        copy: 'PRDs, user flows, wireframes, AI Quiz Validator, TeacherHub, TeachAI Assistant, Content Studio CMS, and automation workflows.',
+        tags: ['5+ products', '3 releases', '40% less manual effort']
+    },
+    {
+        eyebrow: 'Hugsy',
+        href: '/work#hugsy-work',
+        title: 'Worked on early consumer product, onboarding, and growth loops.',
+        copy: 'Mobile and web product flows, competitive analysis across 10+ apps, activation experiments, referrals, and launch storytelling.',
+        tags: ['1000+ visits', '10+ apps analyzed', '5K-10K views']
+    },
+    {
+        eyebrow: 'Portfolio projects',
+        href: '/projects',
+        title: 'AI, iOS, analytics, travel, cricket, agriculture, and healthcare.',
+        copy: 'Projects include AIChatGemma, CherryChat, CricAbode, SCOPE, RailOne Super Route, Provider Data Validation, and Fire Response Vehicle.',
+        tags: ['AI workflows', 'SwiftUI', 'Product strategy']
+    }
+];
+
+const flowingItems = [
+    { label: 'Work', href: '/work' },
+    { label: 'Projects', href: '/projects' },
+    { label: 'Contact', href: '/contact' },
+    { label: 'Resume', href: '/files/AshutoshSrivastavaResume.pdf', external: true }
+];
+
+const certifications = [
+    {
+        provider: 'Microsoft',
+        title: 'Azure AI Fundamentals (AI-900)',
+        href: 'https://drive.google.com/file/d/1eA8WELEx2cjc8LvO4J_k8qMQ5x56pefG/view?usp=sharing',
+        icon: 'microsoft',
+        logo: '/images/logo-microsoft.webp',
+        summary: 'AI workloads, machine learning fundamentals, computer vision, NLP, conversational AI, generative AI, and responsible AI principles.',
+        tags: ['Azure AI', 'ML', 'Responsible AI']
+    },
+    {
+        provider: 'Microsoft',
+        title: 'Azure Data Fundamentals (DP-900)',
+        href: 'https://drive.google.com/file/d/110Wjfx_5EMgAyyFdSBMNhr_LZMRsWrTA/view?usp=sharing',
+        icon: 'microsoft',
+        logo: '/images/logo-microsoft.webp',
+        summary: 'Structured, semi-structured, and unstructured data, relational and non-relational databases, Azure SQL, Cosmos DB, and data roles.',
+        tags: ['Azure SQL', 'Cosmos DB', 'Data roles']
+    },
+    {
+        provider: 'MongoDB',
+        title: 'MongoDB Database Administrator',
+        href: 'https://drive.google.com/file/d/152ZWjt6xcqtTzN7NkeGM8r5deAZbMVoJ/view?usp=sharing',
+        icon: 'mongodb',
+        logo: '/images/logo-mongodb.jpeg',
+        summary: 'MongoDB architecture, document data model, schema design, indexing, authentication, role-based access, CRUD, transactions, and ACID properties.',
+        tags: ['MongoDB', 'Indexes', 'ACID']
+    },
+    {
+        provider: 'NVIDIA',
+        title: 'Fundamentals of Deep Learning',
+        href: 'https://drive.google.com/file/d/1sHMW5wXSFjFGPGym8vMDCewToXj0Luw4/view?usp=sharing',
+        icon: 'nvidia',
+        logo: '/images/logo-nvidia.jpeg',
+        summary: 'Neural networks, CNNs, RNNs, LSTMs, GANs, transfer learning, fine-tuning, and data augmentation for stronger model generalization.',
+        tags: ['CNNs', 'RNNs', 'Transfer learning']
+    },
+    {
+        provider: 'NVIDIA',
+        title: 'Building LLM Applications With Prompt Engineering',
+        href: 'https://drive.google.com/file/d/1bW6ePqXgu7MO3aWkJvzNEGjR9vifHpSo/view?usp=sharing',
+        icon: 'nvidia',
+        logo: '/images/logo-nvidia.jpeg',
+        summary: 'LLM fundamentals, prompt engineering, iterative prompt refinement, templating, chat-based models, few-shot prompting, and Chain of Thought.',
+        tags: ['LLMs', 'Prompting', 'Chatbots']
+    },
+    {
+        provider: 'Udemy',
+        title: 'iOS & Swift - Complete iOS App Development Bootcamp',
+        href: 'https://drive.google.com/file/d/1aN0LxCsfM-q886bnrEjZWVzXKwZSfEi0/view?usp=sharing',
+        icon: 'udemy',
+        logo: '/images/logo-udemy.png',
+        summary: 'Swift, UIKit, SwiftUI, persistence, JSON parsing, APIs, networking, multi-screen apps, navigation, and state management.',
+        tags: ['Swift', 'SwiftUI', 'APIs']
+    },
+    {
+        provider: 'Oracle',
+        title: 'OCI 2025 Generative AI Professional',
+        href: 'https://drive.google.com/file/d/1G1TzFBH5YhKUqibp2CpRHw3LjOk27eQX/view?usp=sharing',
+        icon: 'oracle',
+        logo: '/images/logo-oracle.jpeg',
+        summary: 'LLM architectures, zero-shot, few-shot, Chain of Thought, LoRA, soft prompting, RAG, LangChain, and Oracle Database 23ai.',
+        tags: ['GenAI', 'RAG', 'LangChain']
+    },
+    {
+        provider: 'EY',
+        title: 'EY Case Competition',
+        href: 'https://drive.google.com/file/d/1-GoWwEvAaZeBetF79MDIcMrfpYEY34QM/view?usp=sharing',
+        icon: 'ey',
+        logo: '/images/logo-ey.png',
+        summary: 'Case competition experience focused on structured problem solving, business analysis, recommendation building, and presenting a practical solution narrative.',
+        tags: ['Case solving', 'Strategy', 'Presentation']
+    },
+    {
+        provider: 'LinkedIn',
+        title: 'Explore a Career in Product Management',
+        href: 'https://drive.google.com/file/d/1o1qEqtqy2CkU7uxmeJ0dZVIocDlMOgr4/view?usp=sharing',
+        icon: 'linkedin',
+        logo: '/images/logo-linkedin.jpeg',
+        summary: 'Learning path covering product innovation, product management fundamentals, and product road mapping.',
+        tags: ['Product Management', 'Road Mapping']
+    }
+];
 
 const Home = () => {
-    const gridRef = useRef(null);
-
-    const updates = [
-        { id: 1, type: 'thought', label: 'Ethics', text: 'Reflecting on AI memory.', time: '2h', color: 'var(--c-orange)' },
-        { id: 2, type: 'project', label: 'Commit', text: 'Pushed v2.0 to prod.', time: '5h', color: 'var(--c-purple)' },
-        { id: 3, type: 'photo', label: 'Photo', text: 'Golden hour run.', time: '1d', color: 'var(--c-crimson)' }
-    ];
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.from(".bento-item", {
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.1,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: gridRef.current,
-                    start: "top 80%"
-                }
-            });
-
-            const items = document.querySelectorAll('.bento-item');
-            items.forEach(item => {
-                item.addEventListener('mousemove', (e) => {
-                    const rect = item.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-
-                    gsap.to(item, {
-                        rotationY: x / 10,
-                        rotationX: -y / 10,
-                        transformPerspective: 1000,
-                        duration: 0.4,
-                        ease: "power2.out"
-                    });
-                });
-
-                item.addEventListener('mouseleave', () => {
-                    gsap.to(item, {
-                        rotationY: 0,
-                        rotationX: 0,
-                        duration: 0.5,
-                        ease: "elastic.out(1, 0.5)"
-                    });
-                });
-            });
-
-        }, gridRef);
-
-        return () => ctx.revert();
-    }, []);
-
     return (
-        <div className="page-container dashboard-page">
-            <div className="container" ref={gridRef} style={{ paddingTop: '120px' }}>
-                <div className="bento-grid">
-
-                    <div className="bento-item item-featured-project">
-                        <div className="bento-content">
-                            <div className="bento-header">
-                                <span className="chip chip-purple">Featured Build</span>
-                                <Monitor size={20} className="icon-faded" />
-                            </div>
-                            <h3 className="bento-title">Universe Next.js Platform</h3>
-                            <p className="bento-desc">A massive social platform with 3D mind maps and Duolingo-style gamification.</p>
-
-                            <div className="mockup-laptop">
-                                <div className="screen-content">
-                                    <div className="ui-nav"></div>
-                                    <div className="ui-hero"></div>
-                                    <div className="ui-grid">
-                                        <span></span><span></span><span></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <Link to="/projects" className="bento-link-overlay"></Link>
-                        </div>
+        <main className="home-page" aria-label="Home page">
+            <section className="home-hero" aria-labelledby="home-title">
+                <div className="home-hero-copy">
+                    <h1 id="home-title">I turn messy product ideas into shipped systems.</h1>
+                    <p>
+                        I am Ashutosh Srivastava, a CSE graduate focused on product management roles,
+                        user discovery, product strategy, analytics, and growth experiments.
+                    </p>
+                    <div className="home-cta-row">
+                        <a href="/projects">
+                            View projects
+                            <ArrowUpRight size={18} />
+                        </a>
+                        <a href="/work">
+                            See work
+                            <Briefcase size={18} />
+                        </a>
+                        <a href="/files/AshutoshSrivastavaResume.pdf" target="_blank" rel="noreferrer">
+                            Resume
+                            <ArrowUpRight size={18} />
+                        </a>
+                        <a href="/contact">
+                            Contact me
+                            <Mail size={18} />
+                        </a>
                     </div>
-
-                    <div className="bento-item item-profile">
-                        <div className="bento-content">
-                            <div className="profile-badge">
-                                <div className="avatar">AS</div>
-                                <div>
-                                    <div className="name">Ashutosh</div>
-                                    <div className="role">Creative Dev</div>
-                                </div>
-                            </div>
-                            <div className="bio-text">
-                                <p>Building at the edge of possibility. <br /> Based in India 🇮🇳</p>
-                            </div>
-                            <div className="profile-stats-row">
-                                <div className="stat"><span>12</span> Ships</div>
-                                <div className="stat"><span>50</span> Notes</div>
-                            </div>
-                            <Link to="/identity" className="btn-glass-sm">See Profile <ArrowRight size={14} /></Link>
-                            <Link to="/identity" className="bento-link-overlay"></Link>
-                        </div>
-                    </div>
-
-                    {updates.map((u, i) => (
-                        <div key={u.id} className={`bento-item item-update item-update-${i}`}>
-                            <div className="bento-content">
-                                <div className="update-header" style={{ color: u.color }}>
-                                    {u.key}
-                                    {u.type === 'thought' && <Brain size={16} />}
-                                    {u.type === 'project' && <Code size={16} />}
-                                    {u.type === 'photo' && <Camera size={16} />}
-                                    <span className="update-label">{u.label}</span>
-                                </div>
-                                <p className="update-text">{u.text}</p>
-                                <span className="update-time">{u.time} ago</span>
-                            </div>
-                        </div>
-                    ))}
-
-                    <div className="bento-item item-thought">
-                        <div className="bento-content">
-                            <span className="chip chip-orange">Latest Thought</span>
-                            <h3 className="thought-title">"The future of interfaces is intelligence."</h3>
-                            <div className="thought-footer">
-                                <span>Read Essay</span>
-                                <ArrowRight size={16} />
-                            </div>
-                            <div className="glow-orb orange"></div>
-                            <Link to="/thoughts" className="bento-link-overlay"></Link>
-                        </div>
-                    </div>
-
-                    <div className="bento-item item-calendar">
-                        <div className="bento-content centered">
-                            <div className="status-indicator">
-                                <span className="pulse"></span>
-                                Available
-                            </div>
-                            <div className="calendar-icon">
-                                <span className="cal-check">✓</span>
-                            </div>
-                            <div className="cal-label">Schedule Call</div>
-                            <Link to="/contact" className="bento-link-overlay"></Link>
-                        </div>
-                    </div>
-
-                    <div className="bento-item item-mobile-app">
-                        <div className="bento-content">
-                            <span className="chip chip-blue">Mobile Exp</span>
-                            <h4 className="app-title">Portfolio App</h4>
-
-                            <div className="mockup-phone">
-                                <div className="phone-notch"></div>
-                                <div className="phone-screen">
-                                    <div className="app-header"></div>
-                                    <div className="app-card"></div>
-                                    <div className="app-card short"></div>
-                                </div>
-                            </div>
-                            <Link to="/projects" className="bento-link-overlay"></Link>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
-        </div>
+
+                <aside className="home-profile-card-shell" aria-label="Ashutosh interactive profile card">
+                    <ProfileCard
+                        className="home-clean-profile-card"
+                        avatarUrl="/images/portrait_card_extended_top_only.png"
+                        miniAvatarUrl="/images/portrait_card_extended_top_only.png"
+                        name="Ashutosh Srivastava"
+                        title="Product manager + AI builder"
+                        handle="ashutosh"
+                        status="APM-ready"
+                        contactText="Contact"
+                        innerGradient="linear-gradient(145deg, rgba(4, 31, 103, 0.94) 0%, rgba(74, 177, 255, 0.32) 54%, rgba(255, 255, 255, 0.18) 100%)"
+                        behindGlowColor="rgba(74, 177, 255, 0.66)"
+                        behindGlowSize="54%"
+                        enableTilt
+                        behindGlowEnabled={false}
+                        showUserInfo={false}
+                    />
+                </aside>
+            </section>
+
+            <section className="home-stats" aria-label="Portfolio highlights">
+                {highlights.map((item) => (
+                    <article key={item.label}>
+                        <strong>{item.value}</strong>
+                        <span>{item.label}</span>
+                    </article>
+                ))}
+            </section>
+
+            <section className="home-workbench" aria-label="Portfolio">
+                <div className="home-folder-panel">
+                    <div className="home-folder-stage">
+                        <Folder
+                            size={1.9}
+                            color="#168eea"
+                            className="home-reactbits-folder"
+                            items={[
+                                <div className="folder-file-card" key="flurn">
+                                    <img src="/images/flurn.jpeg" alt="" />
+                                </div>,
+                                <div className="folder-file-card" key="hugsy">
+                                    <img src="/images/hugsy.jpg" alt="" />
+                                </div>,
+                                <div className="folder-file-card" key="ashutosh">
+                                    <img src="/images/ashutosh-avatar.png" alt="" />
+                                </div>
+                            ]}
+                        />
+                    </div>
+                    <div>
+                        <span className="home-section-label">
+                            <FolderOpen size={16} />
+                            Portfolio
+                        </span>
+                        <h2>Work, projects, and product thinking in one place.</h2>
+                        <p>
+                            This portfolio is organized around what I have actually done: shipped product work,
+                            scoped startup-style concepts, built technical projects, and learned from users.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="home-signal-grid">
+                    <article>
+                        <UsersRound size={22} />
+                        <h3>User-first</h3>
+                        <p>Research, interviews, journey maps, onboarding, and user pain points before features.</p>
+                    </article>
+                    <article>
+                        <BarChart3 size={22} />
+                        <h3>Metrics-aware</h3>
+                        <p>Activation, retention, funnels, DAU/MAU thinking, dashboards, and experiment design.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section className="home-operating-system" aria-labelledby="operating-title">
+                <div className="operating-heading">
+                    <h2 id="operating-title">Experience</h2>
+                </div>
+
+                <div className="operating-list">
+                    {stackItems.map((item, index) => (
+                        <Link className="operating-card" to={item.href} key={item.eyebrow}>
+                            <div className="operating-card-topline">
+                                <span>{String(index + 1).padStart(2, '0')}</span>
+                                <small>{item.eyebrow}</small>
+                            </div>
+                            <h3>{item.title}</h3>
+                            <p>{item.copy}</p>
+                            <div className="operating-tags">
+                                {item.tags.map((tag) => (
+                                    <small key={tag}>{tag}</small>
+                                ))}
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </section>
+
+            <section className="home-certifications" aria-labelledby="certifications-title">
+                <div className="certifications-heading">
+                    <h2 id="certifications-title">Certifications</h2>
+                </div>
+
+                <div className="certification-grid">
+                    {certifications.map((cert) => (
+                        <a className="certification-card" href={cert.href} target="_blank" rel="noreferrer" key={cert.title}>
+                            <span className={`cert-logo cert-logo-${cert.icon}`} aria-hidden="true">
+                                <img src={cert.logo} alt="" />
+                            </span>
+                            <span className="cert-provider">{cert.provider}</span>
+                            <h3>{cert.title}</h3>
+                            <p>{cert.summary}</p>
+                            <div className="cert-tags">
+                                {cert.tags.map((tag) => (
+                                    <small key={tag}>{tag}</small>
+                                ))}
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            </section>
+
+            <nav className="home-flowing-menu" aria-label="Featured navigation">
+                {flowingItems.map((item) => (
+                    <a href={item.href} key={item.label} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}>
+                        <span>{item.label}</span>
+                        <span className="flow-marquee" aria-hidden="true">
+                            {Array.from({ length: 6 }, (_, index) => (
+                                <b key={index}>{item.label}</b>
+                            ))}
+                        </span>
+                    </a>
+                ))}
+            </nav>
+        </main>
     );
 };
 

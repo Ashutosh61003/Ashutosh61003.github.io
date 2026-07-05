@@ -1,239 +1,207 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Mail, Send, Twitter, Linkedin, Github, Check } from 'lucide-react';
-import gsap from 'gsap';
+import React, { useRef, useState } from 'react';
+import { AlertTriangle, ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react';
+import ProductImageExpand from '../components/ProductImageExpand';
+import SlideSendButton from '../components/SlideSendButton';
 import './Contact.css';
+
+const contactLinks = [
+    {
+        label: 'Email',
+        value: 'ashu.61003@gmail.com',
+        href: 'mailto:ashu.61003@gmail.com',
+        icon: Mail,
+    },
+    {
+        label: 'LinkedIn',
+        value: 'Connect professionally',
+        href: 'https://www.linkedin.com/in/ashutosh-srivastava-892433226/',
+        icon: Linkedin,
+    },
+    {
+        label: 'GitHub',
+        value: 'See builds and experiments',
+        href: 'https://github.com/AshutoshSri123',
+        icon: Github,
+    },
+];
 
 const Contact = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-    const [submitted, setSubmitted] = useState(false);
-
-    // Refs for animations
-    const containerRef = useRef(null);
-    const profileRef = useRef(null);
-    const bubblesRef = useRef([]);
+    const [status, setStatus] = useState('idle');
+    const [validationError, setValidationError] = useState({ field: '', message: '' });
     const formRef = useRef(null);
-    const sendBtnRef = useRef(null);
 
-    // Entrance and Parallax
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // 1. Entrance Animation
-            const tl = gsap.timeline();
+    const validateForm = () => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            tl.from(profileRef.current, {
-                x: -50,
-                opacity: 0,
-                duration: 1,
-                ease: "power3.out"
-            })
-                .from(bubblesRef.current, {
-                    y: 20,
-                    opacity: 0,
-                    stagger: 0.15,
-                    duration: 0.8,
-                    ease: "back.out(1.7)"
-                }, "-=0.5")
-                .from(formRef.current, {
-                    y: 50,
-                    opacity: 0,
-                    duration: 0.8,
-                    ease: "power3.out"
-                }, "-=0.6");
+        if (!formData.name.trim()) {
+            return { field: 'name', message: 'Add your name.' };
+        }
 
-            // 2. Mouse Parallax Effect
-            const handleMouseMove = (e) => {
-                const { clientX, clientY } = e;
-                const xPos = (clientX / window.innerWidth - 0.5);
-                const yPos = (clientY / window.innerHeight - 0.5);
+        if (!formData.email.trim()) {
+            return { field: 'email', message: 'Add your email.' };
+        }
 
-                // Profile shifts slightly
-                gsap.to(profileRef.current, {
-                    x: xPos * 20,
-                    y: yPos * 20,
-                    rotationY: xPos * 10,
-                    rotationX: -yPos * 10,
-                    duration: 1,
-                    ease: "power2.out"
-                });
+        if (!emailPattern.test(formData.email.trim())) {
+            return { field: 'email', message: 'Enter a valid email.' };
+        }
 
-                // Bubbles float differently for depth
-                bubblesRef.current.forEach((bubble, i) => {
-                    gsap.to(bubble, {
-                        x: xPos * (30 + i * 5),
-                        y: yPos * (30 + i * 5),
-                        duration: 1.2,
-                        ease: "power2.out",
-                        overwrite: "auto"
-                    });
-                });
-            };
+        if (!formData.message.trim()) {
+            return { field: 'message', message: 'Write a short message.' };
+        }
 
-            window.addEventListener('mousemove', handleMouseMove);
-            return () => window.removeEventListener('mousemove', handleMouseMove);
-
-        }, containerRef);
-
-        return () => ctx.revert();
-    }, []);
-
-    // Magnetic Button Effect helper
-    const handleMagneticMove = (e) => {
-        const btn = e.currentTarget;
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-
-        gsap.to(btn, {
-            x: x * 0.3,
-            y: y * 0.3,
-            duration: 0.3,
-            ease: "power2.out"
-        });
+        return { field: '', message: '' };
     };
 
-    const handleMagneticLeave = (e) => {
-        gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-    };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const error = validateForm();
+        if (error.message) {
+            setValidationError(error);
+            return;
+        }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        // Button "Pop" animation
-        gsap.to(sendBtnRef.current, {
-            scale: 0.8,
-            duration: 0.1,
-            yoyo: true,
-            repeat: 1
-        });
+        setValidationError({ field: '', message: '' });
+        setStatus('sending');
 
         try {
-            const res = await fetch("https://formsubmit.co/ajax/ashubecoder@gmail.com", {
-                method: "POST",
+            const response = await fetch('https://formsubmit.co/ajax/ashu.61003@gmail.com', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    Accept: 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    message: formData.message,
+                    _subject: 'Portfolio website inquiry',
+                }),
             });
 
-            if (res.ok) {
-                setSubmitted(true);
-                setTimeout(() => {
-                    setSubmitted(false);
-                    setFormData({ name: '', email: '', message: '' });
-                }, 3000);
-            } else {
-                alert("Something went wrong. Please try again later.");
+            if (!response.ok) {
+                throw new Error('Unable to send message');
             }
+
+            setStatus('sent');
+            setFormData({ name: '', email: '', message: '' });
+            setTimeout(() => setStatus('idle'), 3600);
         } catch (error) {
-            console.error("Form error:", error);
-            alert("Error sending message.");
+            console.error('Form error:', error);
+            setStatus('error');
+            setTimeout(() => setStatus('idle'), 3200);
         }
     };
 
+    const handleSlideComplete = () => {
+        const error = validateForm();
+        if (error.message) {
+            setValidationError(error);
+            return false;
+        }
+
+        setValidationError({ field: '', message: '' });
+        formRef.current.requestSubmit();
+        return true;
+    };
+
     return (
-        <div className="contact-page" ref={containerRef}>
-            <div className="contact-grid">
+        <main className="contact-page">
+            <section className="contact-shell">
+                <div className="contact-intro">
+                    <ProductImageExpand />
 
-                {/* Profile Section */}
-                <div className="profile-section" ref={profileRef}>
-                    <div className="profile-card">
-                        <div className="profile-header">
-                            <div className="profile-avatar">AS</div>
-                            <div className="profile-info">
-                                <h3 className="profile-name">Ashutosh Srivastava</h3>
-                                <p className="profile-handle">@ashutosh_me</p>
-                            </div>
-                        </div>
-                        <div className="profile-bio">
-                            <p className="profile-bio-text">Building digital experiences at the intersection of logic, design, and AI.  Let's Create.</p>
-                        </div>
-                        <div className="social-row">
-                            {[Mail, Twitter, Linkedin, Github].map((Icon, i) => (
-                                <a
-                                    key={i}
-                                    href="#"
-                                    className="social-icon"
-                                    onMouseMove={handleMagneticMove}
-                                    onMouseLeave={handleMagneticLeave}
-                                >
-                                    <Icon size={20} />
-                                </a>
-                            ))}
-                        </div>
+                    <div className="contact-link-list">
+                        {contactLinks.map(({ label, value, href, icon: Icon }) => (
+                            <a key={label} href={href} className="contact-link-card" target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer' : undefined}>
+                                <span className="contact-link-icon">
+                                    <Icon size={19} />
+                                </span>
+                                <span>
+                                    <small>{label}</small>
+                                    <strong>{value}</strong>
+                                </span>
+                                <ArrowUpRight size={18} className="contact-link-arrow" />
+                            </a>
+                        ))}
                     </div>
                 </div>
 
-                {/* Chat Section */}
-                <div className="chat-section">
-                    <div className="chat-date">TODAY 10:23 AM</div>
-
-                    <div className="message message-received" ref={el => bubblesRef.current[0] = el}>
-                        <div className="message-bubble">
-                            Want to work together? Or just want to chat? 👋
-                        </div>
+                <form ref={formRef} className="contact-form-card" onSubmit={handleSubmit} noValidate>
+                    <div className="form-heading">
+                        <h2>Get in touch with me.</h2>
                     </div>
 
-                    <div className="message message-received" ref={el => bubblesRef.current[1] = el}>
-                        <div className="message-bubble">
-                            Send me a text here (no, for real) 👇
-                        </div>
-                    </div>
+                    <label className="field-group">
+                        <span>Your name</span>
+                        <input
+                            type="text"
+                            value={formData.name}
+                            onChange={(event) => {
+                                setFormData({ ...formData, name: event.target.value });
+                                setValidationError({ field: '', message: '' });
+                            }}
+                            placeholder="Ashutosh"
+                        />
+                        {validationError.field === 'name' && (
+                            <span className="field-alert" role="alert">
+                                <AlertTriangle size={14} />
+                                {validationError.message}
+                            </span>
+                        )}
+                    </label>
 
-                    <div className="message message-sent" ref={el => bubblesRef.current[2] = el}>
-                        <div className="message-bubble">
-                            Sounds good! Let's do this. 🔥
-                        </div>
-                    </div>
+                    <label className="field-group">
+                        <span>Email address</span>
+                        <input
+                            type="email"
+                            value={formData.email}
+                            onChange={(event) => {
+                                setFormData({ ...formData, email: event.target.value });
+                                setValidationError({ field: '', message: '' });
+                            }}
+                            placeholder="you@company.com"
+                        />
+                        {validationError.field === 'email' && (
+                            <span className="field-alert" role="alert">
+                                <AlertTriangle size={14} />
+                                {validationError.message}
+                            </span>
+                        )}
+                    </label>
 
-                    {/* Chat Form */}
-                    <div className="chat-input-area" ref={formRef}>
+                    <label className="field-group">
+                        <span>Message</span>
+                        <textarea
+                            value={formData.message}
+                            onChange={(event) => {
+                                setFormData({ ...formData, message: event.target.value });
+                                setValidationError({ field: '', message: '' });
+                            }}
+                            placeholder="Share the role, project, or problem space..."
+                            rows="7"
+                        />
+                        {validationError.field === 'message' && (
+                            <span className="field-alert field-alert-textarea" role="alert">
+                                <AlertTriangle size={14} />
+                                {validationError.message}
+                            </span>
+                        )}
+                    </label>
 
-                        {/* Success Overlay inside the card */}
-                        <div className={`success-overlay ${submitted ? 'active' : ''}`}>
-                            <div className="success-icon">
-                                <Check size={32} />
-                            </div>
-                        </div>
+                    <SlideSendButton
+                        status={status}
+                        onComplete={handleSlideComplete}
+                        disabled={status === 'sending'}
+                    />
 
-                        <form className="chat-form" onSubmit={handleSubmit}>
-                            <div className="chat-inputs-row">
-                                <input
-                                    type="text"
-                                    placeholder="Your Name"
-                                    className="chat-input"
-                                    value={formData.name}
-                                    onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                    required
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="email@example.com"
-                                    className="chat-input"
-                                    value={formData.email}
-                                    onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                    required
-                                />
-                            </div>
-
-                            <div className="chat-send-wrapper">
-                                <textarea
-                                    placeholder="Type your message..."
-                                    className="chat-input chat-textarea"
-                                    value={formData.message}
-                                    onChange={e => setFormData({ ...formData, message: e.target.value })}
-                                    required
-                                />
-                                <button ref={sendBtnRef} type="submit" className="chat-send-btn">
-                                    <Send size={22} />
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+                    <p className={`form-status ${status === 'error' ? 'is-error' : ''}`}>
+                        {status === 'sent' && 'Message sent. I will get back to you soon.'}
+                        {status === 'error' && 'Something went wrong. Please email me directly.'}
+                    </p>
+                </form>
+            </section>
+        </main>
     );
 };
 
