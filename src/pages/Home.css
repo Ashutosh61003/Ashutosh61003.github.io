@@ -733,6 +733,10 @@
     background: rgba(230, 247, 255, 0.24);
 }
 
+.home-page.has-certificate-modal .home-flowing-menu {
+    display: none;
+}
+
 .home-certifications {
     margin-top: 34px;
 }

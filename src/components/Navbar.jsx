@@ -9,6 +9,7 @@ const Navbar = () => {
     const location = useLocation();
     const navRef = useRef(null);
     const lastScrollYRef = useRef(0);
+    const lastTouchYRef = useRef(0);
 
     const isMobileViewport = () => window.matchMedia?.('(max-width: 760px)').matches;
 
@@ -26,7 +27,7 @@ const Navbar = () => {
                 setIsExpanded(false);
             } else if (delta < -2) {
                 setScrolled(false);
-                setIsExpanded(false);
+                setIsExpanded(true);
             }
 
             lastScrollYRef.current = currentY;
@@ -39,26 +40,26 @@ const Navbar = () => {
             }
             if (event.deltaY < -12) {
                 setScrolled(false);
-                setIsExpanded(false);
+                setIsExpanded(isMobileViewport());
             }
         };
 
-        let touchStartY = 0;
         const handleTouchStart = (event) => {
-            touchStartY = event.touches[0]?.clientY || 0;
+            lastTouchYRef.current = event.touches[0]?.clientY || 0;
         };
         const handleTouchMove = (event) => {
             if (document.body.classList.contains('project-modal-open')) return;
             const currentY = event.touches[0]?.clientY || 0;
-            const delta = touchStartY - currentY;
+            const delta = lastTouchYRef.current - currentY;
             if (delta > 12) {
                 setScrolled(true);
                 setIsExpanded(false);
             }
             if (delta < -12) {
                 setScrolled(false);
-                setIsExpanded(false);
+                setIsExpanded(true);
             }
+            lastTouchYRef.current = currentY;
         };
 
         lastScrollYRef.current = window.scrollY;
@@ -141,7 +142,7 @@ const Navbar = () => {
             >
                 <NavLink to="/" className="nav-brand-area" aria-label="Go home">
                     <span className="avatar-bubble">
-                        <img src="/images/ashutosh-avatar.png" alt="Ashutosh Srivastava" className="avatar-photo" />
+                        <img src="/images/ashutosh-avatar.png" alt="Ashutosh Srivastava" className="avatar-photo" loading="eager" fetchPriority="high" />
                     </span>
                     <span className="brand-logo">ASHUTOSH</span>
                 </NavLink>

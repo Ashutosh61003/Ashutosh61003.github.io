@@ -269,7 +269,7 @@ const ProfileCardComponent = ({
                         <div className="pc-shine" />
                         <div className="pc-glare" />
                         <div className="pc-content pc-avatar-content">
-                            <img className="avatar" src={avatarUrl} alt={`${name} portrait`} loading="lazy" />
+                            <img className="avatar" src={avatarUrl} alt={`${name} portrait`} loading="eager" fetchPriority="high" />
                             {showUserInfo && (
                                 <div className="pc-user-info">
                                     <div className="pc-user-details">
