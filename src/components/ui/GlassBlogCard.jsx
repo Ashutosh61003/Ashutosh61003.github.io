@@ -5,7 +5,7 @@ import './GlassBlogCard.css';
 
 const fallbackAuthor = {
     name: 'Ashutosh Srivastava',
-    avatar: '/images/ashutosh-avatar.png'
+    avatar: '/images/ashutosh-avatar-optimized-small.webp'
 };
 
 const GlassBlogCard = ({

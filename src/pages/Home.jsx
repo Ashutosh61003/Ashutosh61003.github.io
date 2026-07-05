@@ -163,8 +163,10 @@ const Home = () => {
                 <aside className="home-profile-card-shell" aria-label="Ashutosh interactive profile card">
                     <ProfileCard
                         className="home-clean-profile-card"
-                        avatarUrl="/images/portrait_card_extended_top_only.png"
-                        miniAvatarUrl="/images/portrait_card_extended_top_only.png"
+                        avatarUrl="/images/portrait-card-optimized.webp"
+                        avatarSrcSet="/images/portrait-card-optimized-mobile.webp 560w, /images/portrait-card-optimized.webp 820w"
+                        avatarSizes="(max-width: 640px) 560px, 820px"
+                        miniAvatarUrl="/images/ashutosh-avatar-optimized-small.webp"
                         name="Ashutosh Srivastava"
                         title="Product manager + AI builder"
                         handle="ashutosh"
@@ -212,7 +214,7 @@ const Home = () => {
                                     <img src="/images/hugsy.jpg" alt="" />
                                 </div>,
                                 <div className="folder-file-card" key="ashutosh">
-                                    <img src="/images/ashutosh-avatar.png" alt="" />
+                                    <img src="/images/ashutosh-avatar-optimized-small.webp" alt="" />
                                 </div>
                             ]}
                         />
