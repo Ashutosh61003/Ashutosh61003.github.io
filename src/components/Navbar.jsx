@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const location = useLocation();
     const navRef = useRef(null);
 
@@ -56,11 +58,35 @@ const Navbar = () => {
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
         setIsExpanded(false);
+        setIsMobileMenuOpen(false);
         if (navRef.current?.contains(document.activeElement)) {
             document.activeElement.blur();
         }
         setScrolled(window.scrollY > 80);
     }, [location.pathname]);
+
+    useEffect(() => {
+        if (!isMobileMenuOpen) return;
+
+        const handlePointerDown = (event) => {
+            if (!navRef.current?.contains(event.target)) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('pointerdown', handlePointerDown);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('pointerdown', handlePointerDown);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isMobileMenuOpen]);
 
     const links = [
         { name: 'Home', path: '/' },
@@ -70,7 +96,11 @@ const Navbar = () => {
     ];
 
     return (
-        <nav ref={navRef} className={`navbar ${scrolled ? 'scrolled' : 'expanded'} ${isExpanded ? 'is-expanded' : ''}`} aria-label="Primary navigation">
+        <nav
+            ref={navRef}
+            className={`navbar ${scrolled ? 'scrolled' : 'expanded'} ${isExpanded ? 'is-expanded' : ''} ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`}
+            aria-label="Primary navigation"
+        >
             <div
                 className="nav-shell"
                 onMouseEnter={() => setIsExpanded(true)}
@@ -101,10 +131,34 @@ const Navbar = () => {
                     ))}
                 </div>
 
+                <button
+                    type="button"
+                    className="mobile-menu-toggle"
+                    aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                    aria-expanded={isMobileMenuOpen}
+                    aria-controls="mobile-nav-menu"
+                    onClick={() => setIsMobileMenuOpen((isOpen) => !isOpen)}
+                >
+                    {isMobileMenuOpen ? <X size={20} strokeWidth={2.4} /> : <Menu size={20} strokeWidth={2.4} />}
+                </button>
+
                 <div className="nav-dots" aria-hidden="true">
                     <span></span>
                     <span></span>
                     <span></span>
+                </div>
+
+                <div className="mobile-nav-panel" id="mobile-nav-menu">
+                    {links.map((link) => (
+                        <NavLink
+                            key={link.path}
+                            to={link.path}
+                            className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            {link.name}
+                        </NavLink>
+                    ))}
                 </div>
             </div>
         </nav>
