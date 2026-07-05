@@ -259,10 +259,10 @@
 
     .navbar.scrolled .nav-shell {
         grid-template-columns: auto auto;
-        width: min(218px, calc(100vw - 24px));
+        width: min(270px, calc(100vw - 24px));
         height: 54px;
         min-height: 54px;
-        gap: 14px;
+        gap: 12px;
         padding: 7px 16px 7px 9px;
     }
 
@@ -281,6 +281,14 @@
         font-size: 0.98rem;
         letter-spacing: -0.01em;
         text-overflow: ellipsis;
+    }
+
+    .navbar.scrolled:not(.is-expanded) .nav-brand-area {
+        max-width: calc(100% - 44px);
+    }
+
+    .navbar.scrolled:not(.is-expanded) .brand-logo {
+        max-width: 122px;
     }
 
     .nav-links,
@@ -379,6 +387,10 @@
     .brand-logo {
         max-width: clamp(54px, calc(100vw - 270px), 92px);
         font-size: 0.86rem;
+    }
+
+    .navbar.scrolled:not(.is-expanded) .brand-logo {
+        max-width: 106px;
     }
 
     .nav-brand-area {

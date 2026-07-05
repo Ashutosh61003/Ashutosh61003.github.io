@@ -316,6 +316,10 @@
         grid-template-columns: 1fr;
     }
 
+    .contact-form-card {
+        order: -1;
+    }
+
     .contact-intro {
         min-height: auto;
     }
