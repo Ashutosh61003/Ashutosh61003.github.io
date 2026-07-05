@@ -219,6 +219,11 @@
     background: rgba(43, 47, 51, 0.82);
 }
 
+.mobile-menu-toggle,
+.mobile-nav-panel {
+    display: none;
+}
+
 .navbar.scrolled .nav-dots {
     width: 32px;
     opacity: 1;
@@ -235,33 +240,55 @@
 
 @media (max-width: 760px) {
     .navbar {
-        top: 22px;
+        top: 14px;
+        padding: 0 12px;
     }
 
     .nav-shell,
     .navbar.scrolled .nav-shell:hover,
     .navbar.scrolled .nav-shell:focus-within,
     .navbar.scrolled.is-expanded .nav-shell {
-        width: min(94vw, 520px);
-        min-height: 49px;
-        gap: 9px;
-        padding: 6px 12px 6px 8px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        width: min(100%, 430px);
+        min-height: 54px;
+        gap: 8px 12px;
+        padding: 7px 8px 7px 9px;
+        overflow: hidden;
+        border-radius: 27px;
     }
 
     .navbar.scrolled .nav-shell {
-        width: min(218px, calc(100vw - 20px));
-        min-height: 49px;
-        gap: 9px;
-        padding: 6px 12px 6px 8px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        width: min(100%, 430px);
+        min-height: 54px;
+        gap: 8px 12px;
+        padding: 7px 8px 7px 9px;
+    }
+
+    .navbar.mobile-menu-open .nav-shell {
+        border-radius: 27px;
+        background: rgba(232, 247, 255, 0.72);
+        box-shadow:
+            0 18px 46px rgba(4, 14, 28, 0.22),
+            inset 0 1px 0 rgba(255, 255, 255, 0.38),
+            inset 0 -1px 0 rgba(16, 29, 43, 0.14);
+    }
+
+    .navbar.mobile-menu-open .nav-shell::before {
+        opacity: 0.34;
     }
 
     .avatar-bubble {
-        width: 35px;
-        height: 35px;
+        width: 38px;
+        height: 38px;
     }
 
     .brand-logo {
-        font-size: 0.9rem;
+        max-width: calc(100vw - 128px);
+        overflow: hidden;
+        font-size: 0.98rem;
+        letter-spacing: -0.01em;
+        text-overflow: ellipsis;
     }
 
     .nav-links,
@@ -271,9 +298,81 @@
         display: none;
     }
 
-    .nav-item {
-        min-height: 41px;
-        padding: 0 7px;
+    .mobile-menu-toggle {
+        position: relative;
+        z-index: 2;
+        display: inline-grid;
+        width: 40px;
+        height: 40px;
+        place-items: center;
+        border-radius: 50%;
+        color: #202124;
+        background: rgba(255, 255, 255, 0.34);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.48),
+            0 6px 14px rgba(4, 14, 28, 0.14);
+        transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .mobile-menu-toggle:active {
+        transform: scale(0.96);
+    }
+
+    .navbar.mobile-menu-open .mobile-menu-toggle {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .mobile-nav-panel {
+        position: relative;
+        z-index: 1;
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        max-height: 0;
+        margin-top: 0;
+        padding: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-6px);
+        transition:
+            max-height 320ms var(--nav-ease-soft),
+            margin-top 260ms ease,
+            opacity 180ms ease,
+            transform 260ms var(--nav-ease-soft);
+    }
+
+    .navbar.mobile-menu-open .mobile-nav-panel {
+        max-height: 160px;
+        margin-top: 4px;
+        padding: 4px 0 1px;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .mobile-nav-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        border-radius: 21px;
+        color: #202124;
+        background: rgba(255, 255, 255, 0.62);
+        font-size: 0.93rem;
+        font-weight: 760;
+        line-height: 1;
+        white-space: nowrap;
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.35),
+            0 4px 12px rgba(4, 14, 28, 0.08);
+    }
+
+    .mobile-nav-item.active {
+        background: rgba(255, 255, 255, 0.86);
+        color: #111827;
     }
 
     .nav-dots,
@@ -281,25 +380,25 @@
     .navbar.scrolled .nav-shell:hover .nav-dots,
     .navbar.scrolled .nav-shell:focus-within .nav-dots,
     .navbar.scrolled.is-expanded .nav-dots {
-        width: 20px;
-        opacity: 1;
-        transform: none;
-        margin-left: auto;
-    }
-
-    .nav-dots span {
-        width: 6px;
-        height: 6px;
+        display: none;
     }
 }
 
 @media (max-width: 390px) {
     .brand-logo {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 
     .nav-brand-area {
-        gap: 10px;
+        gap: 9px;
+    }
+
+    .mobile-nav-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar.mobile-menu-open .mobile-nav-panel {
+        max-height: 220px;
     }
 }
 
