@@ -271,6 +271,10 @@
         height: 38px;
     }
 
+    .nav-brand-area {
+        max-width: calc(100% - 186px);
+    }
+
     .brand-logo {
         max-width: calc(100vw - 270px);
         overflow: hidden;
@@ -287,7 +291,9 @@
     }
 
     .mobile-icon-links {
-        position: relative;
+        position: absolute;
+        top: 50%;
+        right: 14px;
         z-index: 2;
         display: flex;
         align-items: center;
@@ -296,7 +302,7 @@
         min-width: 0;
         overflow: hidden;
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(-50%);
         transition:
             opacity 300ms ease,
             transform 520ms var(--nav-ease),
@@ -305,22 +311,22 @@
 
     .navbar.scrolled .mobile-icon-links {
         position: absolute;
-        right: 52px;
+        right: 14px;
         max-width: 0;
         opacity: 0;
         pointer-events: none;
-        transform: translate3d(16px, 0, 0) scale(0.98);
+        transform: translate3d(16px, -50%, 0) scale(0.98);
     }
 
     .navbar.scrolled .nav-shell:hover .mobile-icon-links,
     .navbar.scrolled .nav-shell:focus-within .mobile-icon-links,
     .navbar.scrolled.is-expanded .mobile-icon-links {
-        position: relative;
-        right: auto;
+        position: absolute;
+        right: 14px;
         max-width: 190px;
         opacity: 1;
         pointer-events: auto;
-        transform: translate3d(0, 0, 0) scale(1);
+        transform: translate3d(0, -50%, 0) scale(1);
     }
 
     .mobile-icon-item {
@@ -377,21 +383,31 @@
 
     .nav-brand-area {
         gap: 8px;
+        max-width: calc(100% - 172px);
     }
 
     .mobile-icon-links {
+        right: 12px;
         gap: 4px;
     }
 
-    .mobile-icon-item {
-        width: 34px;
-        height: 34px;
+    .navbar.scrolled .mobile-icon-links {
+        right: 12px;
+        transform: translate3d(16px, -50%, 0) scale(0.98);
     }
 
     .navbar.scrolled .nav-shell:hover .mobile-icon-links,
     .navbar.scrolled .nav-shell:focus-within .mobile-icon-links,
     .navbar.scrolled.is-expanded .mobile-icon-links {
+        position: absolute;
+        right: 12px;
         max-width: 148px;
+        transform: translate3d(0, -50%, 0) scale(1);
+    }
+
+    .mobile-icon-item {
+        width: 34px;
+        height: 34px;
     }
 }
 

@@ -92,7 +92,7 @@ const Work = () => {
                         <strong>Associate Product Manager opportunities</strong>
                         <p>Focused on roles where I can contribute to product discovery, execution, analytics, and growth.</p>
                         <div className="work-focus-actions">
-                            <a href="/files/AshutoshSrivastavaResume.pdf" target="_blank" rel="noreferrer">
+                            <a href="/files/AshutoshSrivastavaResume.pdf" target="_blank" rel="noopener noreferrer">
                                 Resume
                                 <ArrowUpRight size={18} />
                             </a>

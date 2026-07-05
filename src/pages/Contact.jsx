@@ -113,7 +113,7 @@ const Contact = () => {
 
                     <div className="contact-link-list">
                         {contactLinks.map(({ label, value, href, icon: Icon }) => (
-                            <a key={label} href={href} className="contact-link-card" target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer' : undefined}>
+                            <a key={label} href={href} className="contact-link-card" target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}>
                                 <span className="contact-link-icon">
                                     <Icon size={19} />
                                 </span>

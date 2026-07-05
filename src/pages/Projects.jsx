@@ -968,7 +968,7 @@ const Projects = () => {
                                 <h3>Links</h3>
                                 <div className="project-detail-link-row">
                                     {selectedProject.links.map((link) => (
-                                        <a key={link.href} className="project-detail-action" href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel={link.href.startsWith('http') ? 'noreferrer' : undefined}>
+                                        <a key={link.href} className="project-detail-action" href={link.href} target="_blank" rel="noopener noreferrer">
                                             {link.label}
                                             <ArrowUpRight size={18} />
                                         </a>

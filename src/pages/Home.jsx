@@ -132,7 +132,7 @@ const Home = () => {
     const [selectedCertificate, setSelectedCertificate] = useState(null);
 
     return (
-        <main className="home-page" aria-label="Home page">
+        <main className={`home-page ${selectedCertificate ? 'has-certificate-modal' : ''}`} aria-label="Home page">
             <section className="home-hero" aria-labelledby="home-title">
                 <div className="home-hero-copy">
                     <h1 id="home-title">I turn messy product ideas into shipped systems.</h1>
@@ -153,7 +153,7 @@ const Home = () => {
                             Contact
                             <Mail size={18} />
                         </a>
-                        <a href="/files/AshutoshSrivastavaResume.pdf" target="_blank" rel="noreferrer">
+                        <a href="/files/AshutoshSrivastavaResume.pdf" target="_blank" rel="noopener noreferrer">
                             Resume
                             <ArrowUpRight size={18} />
                         </a>
@@ -329,7 +329,7 @@ const Home = () => {
                                     <small key={tag}>{tag}</small>
                                 ))}
                             </div>
-                            <a className="certificate-view-link" href={selectedCertificate.href} target="_blank" rel="noreferrer">
+                            <a className="certificate-view-link" href={selectedCertificate.href} target="_blank" rel="noopener noreferrer">
                                 View certificate
                                 <ExternalLink size={17} />
                             </a>
@@ -340,7 +340,7 @@ const Home = () => {
 
             <nav className="home-flowing-menu" aria-label="Featured navigation">
                 {flowingItems.map((item) => (
-                    <a href={item.href} key={item.label} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined}>
+                    <a href={item.href} key={item.label} target={item.external ? '_blank' : undefined} rel={item.external ? 'noopener noreferrer' : undefined}>
                         <span>{item.label}</span>
                         <span className="flow-marquee" aria-hidden="true">
                             {Array.from({ length: 6 }, (_, index) => (
