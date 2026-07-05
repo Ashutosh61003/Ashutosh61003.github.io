@@ -66,6 +66,7 @@
 }
 
 .projects-hero h1 {
+    width: 100%;
     max-width: 100%;
     color: #061f6f;
     font-size: clamp(1.55rem, 3.2vw, 3.3rem);
@@ -77,7 +78,10 @@
 }
 
 .projects-hero p {
+    width: 100%;
     max-width: 100%;
+    text-align: justify;
+    text-align-last: left;
     color: rgba(6, 31, 111, 0.76);
     font-size: clamp(0.84rem, 0.94vw, 0.98rem);
     line-height: 1.48;
