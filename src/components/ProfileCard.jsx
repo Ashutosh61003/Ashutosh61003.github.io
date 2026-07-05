@@ -18,6 +18,8 @@ const adjust = (value, fromMin, fromMax, toMin, toMax) =>
 
 const ProfileCardComponent = ({
     avatarUrl,
+    avatarSrcSet,
+    avatarSizes,
     iconUrl,
     grainUrl,
     innerGradient,
@@ -269,7 +271,15 @@ const ProfileCardComponent = ({
                         <div className="pc-shine" />
                         <div className="pc-glare" />
                         <div className="pc-content pc-avatar-content">
-                            <img className="avatar" src={avatarUrl} alt={`${name} portrait`} loading="eager" fetchPriority="high" />
+                            <img
+                                className="avatar"
+                                src={avatarUrl}
+                                srcSet={avatarSrcSet}
+                                sizes={avatarSizes}
+                                alt={`${name} portrait`}
+                                loading="eager"
+                                fetchPriority="high"
+                            />
                             {showUserInfo && (
                                 <div className="pc-user-info">
                                     <div className="pc-user-details">

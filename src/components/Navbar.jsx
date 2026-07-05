@@ -142,7 +142,7 @@ const Navbar = () => {
             >
                 <NavLink to="/" className="nav-brand-area" aria-label="Go home">
                     <span className="avatar-bubble">
-                        <img src="/images/ashutosh-avatar.png" alt="Ashutosh Srivastava" className="avatar-photo" loading="eager" fetchPriority="high" />
+                        <img src="/images/ashutosh-avatar-optimized-small.webp" alt="Ashutosh Srivastava" className="avatar-photo" loading="eager" fetchPriority="high" />
                     </span>
                     <span className="brand-logo">ASHUTOSH</span>
                 </NavLink>
