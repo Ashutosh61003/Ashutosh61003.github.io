@@ -1,0 +1,35 @@
+.scroll-stack-scroller {
+    position: relative;
+    width: 100%;
+    overflow-x: visible;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    transform: translateZ(0);
+    will-change: scroll-position;
+}
+
+.scroll-stack-scroller:not(.use-window-scroll) {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.scroll-stack-inner {
+    min-height: 100vh;
+    padding: 14vh 0 36rem;
+}
+
+.scroll-stack-card {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    transform-origin: top center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform, filter;
+}
+
+.scroll-stack-end {
+    width: 100%;
+    height: 1px;
+}

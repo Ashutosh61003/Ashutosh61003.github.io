@@ -21,6 +21,9 @@
   --c-text-muted: #425466;
   --c-border: #E6EBF1;
 
+  --sky-bg:
+    linear-gradient(180deg, #168eea 0%, #20a2f3 42%, #75ccfb 78%, #f0fbff 100%);
+
   /* Mesh Gradients */
   --gradient-mesh: radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
     radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
@@ -37,8 +40,8 @@
   --space-xl: 6rem;
 
   /* Typography - Apple-style Hierarchy */
-  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-body: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 
   --text-hero: clamp(3rem, 6vw, 5rem);
   --text-h1: clamp(2rem, 4vw, 3rem);
@@ -57,8 +60,8 @@
   --radius-lg: 24px;
 
   /* New Theme Variables for Glass/Gradients */
-  --bg-gradient: radial-gradient(circle at 10% 20%, #F0F4F8 0%, #E6EBF1 90%);
-  --glass-bg: rgba(255, 255, 255, 0.7);
+  --bg-gradient: var(--sky-bg);
+  --glass-bg: rgba(255, 255, 255, 0.28);
   --glass-border: rgba(255, 255, 255, 0.5);
   --glass-text: #0A2540;
   --input-bg: rgba(255, 255, 255, 0.5);
@@ -70,7 +73,7 @@
 
 /* Dark Mode Overrides - Deep & Rich */
 [data-theme="dark"] {
-  --c-bg: #050505;
+  --c-bg: #188eea;
   --c-surface: #121212;
   --c-text-main: #FFFFFF;
   --c-text-muted: #A0A0A0;
@@ -80,9 +83,9 @@
   --shadow-md: 0 13px 27px -5px rgba(0, 0, 0, 0.5);
 
   /* Dark Gradients & Glass */
-  --bg-gradient: radial-gradient(circle at 10% 20%, #0a0f2c 0%, #050505 90%);
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --bg-gradient: var(--sky-bg);
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.2);
   --glass-text: #FFFFFF;
   --input-bg: rgba(0, 0, 0, 0.2);
 }
