@@ -16,7 +16,6 @@ import {
   LockKeyhole,
   Sparkles,
   ExternalLink,
-  RefreshCw,
   Archive,
   Trash2,
 } from "lucide-react";
@@ -30,7 +29,6 @@ import {
   remainingSeconds,
   move,
   todayKey,
-  youtubeResource,
 } from "./model";
 import { endpoint, request } from "./api";
 import "./dreams.css";
@@ -53,8 +51,6 @@ const blankStep = (goalId, order) => ({
   durationMinutes: null,
   plannedDate: "",
   completed: false,
-  completedThrough: 0,
-  metadata: null,
 });
 function storedSession() {
   try {
@@ -147,8 +143,6 @@ export default function Dreams() {
   const [password, setPassword] = useState("");
   const [unlocking, setUnlocking] = useState(false);
   const [draft, setDraft] = useState(null);
-  const [lookupBusy, setLookupBusy] = useState(false);
-  const [lookupError, setLookupError] = useState("");
   const [conflict, setConflict] = useState(null);
   const [pending, setPending] = useState(null);
   const busy = useRef(false);
@@ -173,7 +167,6 @@ export default function Dreams() {
     setDialog(null);
     setDraft(null);
     setPassword("");
-    setLookupError("");
     dirty.current = !!pendingRef.current;
   }, []);
   const endEdit = React.useCallback(() => {
@@ -335,36 +328,12 @@ export default function Dreams() {
   const openStep = (step) => {
     setDraft({ ...step });
     dirty.current = true;
-    setLookupError("");
     setDialog("step");
   };
   const change = (key, value) => {
     dirty.current = true;
     setDraft((previous) => ({ ...previous, [key]: value }));
   };
-  async function lookup(force = false) {
-    if (!editing || lookupBusy) return;
-    const url = draft.url;
-    setLookupBusy(true);
-    setLookupError("");
-    try {
-      const metadata = await request("metadata", { url, force }, session.token);
-      setDraft((previous) =>
-        previous?.url === url
-          ? {
-              ...previous,
-              metadata,
-              kind: metadata.kind,
-              title: previous.title || metadata.title,
-            }
-          : previous,
-      );
-    } catch (e) {
-      setLookupError(e.message);
-    } finally {
-      setLookupBusy(false);
-    }
-  }
   const goalSave = (e) => {
     e.preventDefault();
     const item = { ...draft, title: draft.title.trim() };
@@ -1065,8 +1034,6 @@ export default function Dreams() {
                   value={draft.kind}
                   onChange={(e) => {
                     change("kind", e.target.value);
-                    change("metadata", null);
-                    change("completedThrough", 0);
                   }}
                 >
                   {Object.keys(icons).map((kind) => (
@@ -1080,55 +1047,18 @@ export default function Dreams() {
                 Link <span>optional</span>
                 <input
                   type="url"
+                  pattern="https?://.+"
                   maxLength={2000}
                   placeholder="https://"
                   value={draft.url}
                   onChange={(e) => {
                     change("url", e.target.value);
-                    change("metadata", null);
-                    change("completedThrough", 0);
-                  }}
-                  onBlur={() => {
-                    if (youtubeResource(draft.url) && !draft.metadata) lookup();
                   }}
                 />
               </label>
-              {youtubeResource(draft.url) && (
-                <button
-                  className="dr-text dr-fetch"
-                  type="button"
-                  disabled={lookupBusy || locked}
-                  onClick={() => lookup(true)}
-                >
-                  <RefreshCw size={14} />
-                  {lookupBusy
-                    ? "Finding duration…"
-                    : draft.metadata
-                      ? "Refresh YouTube details"
-                      : "Get YouTube details"}
-                </button>
-              )}
-              {lookupError && (
-                <p className="dr-form-error">
-                  {lookupError} You can still save your link.
-                </p>
-              )}
-              {draft.metadata && (
-                <div className="dr-resource-summary">
-                  <strong>
-                    {duration(draft.metadata.seconds)} content time
-                  </strong>
-                  {draft.metadata.videos?.length > 1 && (
-                    <span>{draft.metadata.videos.length} videos</span>
-                  )}
-                  {draft.metadata.partial && (
-                    <span>Partial total · unavailable videos excluded</span>
-                  )}
-                </div>
-              )}
               <div className="dr-form-pair">
                 <label>
-                  Minutes <span>optional override</span>
+                  Minutes <span>optional</span>
                   <input
                     type="number"
                     min="0"
@@ -1152,27 +1082,6 @@ export default function Dreams() {
                   />
                 </label>
               </div>
-              {draft.kind === "playlist" &&
-                draft.metadata?.videos?.length > 0 && (
-                  <label>
-                    Completed through video
-                    <input
-                      type="number"
-                      min="0"
-                      max={draft.metadata.videos.length}
-                      value={draft.completedThrough}
-                      onChange={(e) =>
-                        change(
-                          "completedThrough",
-                          Math.min(
-                            draft.metadata.videos.length,
-                            Math.max(0, Math.floor(Number(e.target.value))),
-                          ),
-                        )
-                      }
-                    />
-                  </label>
-                )}
               <label>
                 Notes <span>optional</span>
                 <textarea
@@ -1193,7 +1102,7 @@ export default function Dreams() {
               {saveFeedback}
               <button
                 className="dr-primary"
-                disabled={locked || lookupBusy || !draft.title.trim()}
+                disabled={locked || !draft.title.trim()}
               >
                 Save step
                 <Check size={16} />
@@ -1235,9 +1144,6 @@ export default function Dreams() {
               </span>
               {draft.notes && <p className="dr-notes">{draft.notes}</p>}
               {draft.plannedDate && <p>Planned for {draft.plannedDate}</p>}
-              {draft.metadata?.partial && (
-                <p>Partial duration: some videos are unavailable.</p>
-              )}
               {draft.url && (
                 <a
                   className="dr-primary"

@@ -29,16 +29,6 @@ async function mock(
       shared.revision++;
       return reply(shared);
     }
-    if (body.action === "metadata")
-      return reply({
-        kind: "video",
-        id: "abcdefghijk",
-        title: "Video from YouTube",
-        seconds: 600,
-        partial: false,
-        fetchedAt: new Date().toISOString(),
-        videos: [{ id: "abcdefghijk", title: "Video", seconds: 600 }],
-      });
   });
   return shared;
 }
@@ -111,7 +101,7 @@ test("empty state, backend password error, add/edit/complete/reopen and persiste
     await page.locator('meta[name="robots"]').getAttribute("content"),
   ).toBe("noindex, nofollow");
 });
-test("YouTube metadata fills title and duration; manual override and notes", async ({
+test("manual time and resource notes persist without automatic lookup", async ({
   page,
   context,
 }) => {
@@ -120,15 +110,15 @@ test("YouTube metadata fills title and duration; manual override and notes", asy
   await unlock(page);
   await addGoal(page);
   await page.getByRole("button", { name: "Add step", exact: true }).click();
+  await page.getByLabel("Title", { exact: true }).fill("Watch my saved lesson");
   await page.getByLabel("Link optional").fill("https://youtu.be/abcdefghijk");
-  await page.getByRole("button", { name: "Get YouTube details" }).click();
-  await expect(page.getByLabel("Title", { exact: true })).toHaveValue(
-    "Video from YouTube",
-  );
-  await page.getByLabel("Minutes").fill("15");
+  await page.getByLabel("Minutes").fill("75");
   await page.getByLabel("Notes optional").fill("Keep this learning.");
+  await expect(
+    page.getByRole("button", { name: /YouTube details/ }),
+  ).toHaveCount(0);
   await page.getByRole("button", { name: "Save step", exact: true }).click();
-  await expect(page.locator(".dr-summary")).toContainText("15 min");
+  await expect(page.locator(".dr-summary")).toContainText("1h 15m");
   await page.getByRole("button", { name: "Done", exact: true }).click();
   await page.locator(".dr-step-open").click();
   await expect(page.getByText("Keep this learning.")).toBeVisible();

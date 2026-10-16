@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function editor() {
+      return request.auth != null
+        && request.auth.uid == 'REPLACE_WITH_DREAMS_EDITOR_UID'
+        && request.time < timestamp.value(request.auth.token.auth_time * 1000) + duration.value(1, 'h');
+    }
+    match /dreams/workspace {
+      // Only this personal workspace is publicly readable, as requested.
+      allow get: if true;
+      allow list: if false;
+      allow create: if editor() && valid() && request.resource.data.revision == 1;
+      allow update: if editor() && valid() && request.resource.data.revision == resource.data.revision + 1;
+      allow delete: if false;
+      function valid() {
+        return request.resource.data.keys().hasOnly(['stateJson', 'revision'])
+          && request.resource.data.stateJson is string
+          && request.resource.data.stateJson.size() <= 900000
+          && request.resource.data.revision is int;
+      }
+    }
+    // This file is intended for a dedicated project. If an existing project is
+    // selected, preserve its other collection rules and add only the match above.
+    match /{document=**} { allow read, write: if false; }
+  }
+}
