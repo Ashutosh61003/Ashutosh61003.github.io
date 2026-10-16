@@ -10,7 +10,8 @@
         "preview": "vite preview",
         "test:dreams": "node --experimental-strip-types --test tests/dreams.test.mjs",
         "test:dreams:browser": "playwright test",
-        "lint:dreams": "eslint --no-eslintrc --config .eslintrc.dreams.cjs src/dreams src/App.jsx scripts tests playwright.config.js --ext js,jsx,mjs --max-warnings 0"
+        "lint:dreams": "eslint --no-eslintrc --config .eslintrc.dreams.cjs src/dreams src/App.jsx scripts tests playwright.config.js --ext js,jsx,mjs --max-warnings 0",
+        "build:pages-root": "node scripts/sync-pages-root.mjs"
     },
     "dependencies": {
         "@use-gesture/react": "^10.3.1",

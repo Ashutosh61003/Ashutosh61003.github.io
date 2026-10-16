@@ -7,9 +7,9 @@ Dreams now uses **Firebase Authentication + Cloud Firestore**. All durations are
 - Project: **AIChatGemma** (`aichatgemma`), reused because this Google account has reached its project quota.
 - Web app: **Dreams**, app ID `1:632551270983:web:e12f6a2a483f8b99d0df62`.
 - Firestore: Standard edition, default database, region **asia-south1 (Mumbai)**, created in production mode on the existing Spark plan.
-- Email/password sign-in: enabled. The owner has the Add user form open for `dreams-editor@ashutoshsrivastava.me` and must enter and submit the password.
+- Email/password sign-in: enabled. The owner created `dreams-editor@ashutoshsrivastava.me`; its UID is configured in `firestore.rules`.
 - Public web configuration is already committed in `src/dreams/firebase-config.json`; no private Google credentials are stored in the repository.
-- Remaining: create the editor, copy its UID into the rules, publish rules, verify actual saving and cross-device reads, and deploy the site.
+- Rules are published. Real Firebase sign-in, goal/step saving, manual time, completion, and read-only viewing from a separate session have been verified. The rules playground denied an anonymous update. Temporary verification content was removed, leaving an empty workspace.
 
 Neither AIChatGemma nor Magnetile was deleted. Google keeps deleted projects in the quota during the 30-day recovery window, so deletion would not have solved today's quota issue. The pre-existing iOS app was preserved. The newly created Firestore database had no existing collections and started with deny-all rules.
 
@@ -28,7 +28,9 @@ Neither AIChatGemma nor Magnetile was deleted. Google keeps deleted projects in 
 
 The public Firebase config is bundled with the Dreams page. Optional root `.env.local` overrides are listed in `.env.example` for local development. No secret configuration is required for GitHub Actions.
 
-A repository owner must select **Settings → Pages → Build and deployment → Source → GitHub Actions** to consolidate the existing root and Actions deployment paths. Merge the reviewed branch once backend and browser checks pass. The workflow publishes `dist`.
+The current Pages configuration publishes from the repository root alongside the Actions workflow. Run `npm run build:pages-root` before committing frontend changes while that setting remains in place; this updates root publication files to the same build and preserves older hashed assets for cached HTML. The custom Actions workflow still builds and publishes `dist`.
+
+An owner can later select **Settings → Pages → Build and deployment → Source → GitHub Actions** to remove the duplicate publication path. No owner account login or settings change was required to deploy this update.
 
 ## Behavior
 
@@ -50,4 +52,4 @@ npm run test:dreams:browser
 DREAMS_BUILD_DIR=/tmp/dreams-build npm run build
 ```
 
-Browser tests mock the transport to exercise UI saving and conflicts. Actual Firebase sign-in, security rules, and cross-device saving must also be verified after account/project setup. Supabase code and YouTube lookup have been removed.
+Browser tests mock the transport to exercise UI saving and conflicts. Actual Firebase sign-in and saving were also verified through the browser; the rules simulator rejected anonymous writes. Supabase code and YouTube lookup have been removed.
