@@ -26,31 +26,16 @@ export function remainingSeconds(step) {
   ) {
     return Math.max(0, Number(step.durationMinutes) * 60);
   }
-  const meta = step.metadata;
-  if (!meta) return null;
-  const videos = meta.videos || [];
-  if (step.kind === "playlist" && videos.length) {
-    const remaining = videos.slice(step.completedThrough || 0);
-    const known = remaining.filter((v) => v.seconds !== null);
-    return known.length
-      ? known.reduce((n, v) => n + v.seconds, 0)
-      : remaining.length
-        ? null
-        : 0;
-  }
-  return meta.seconds ?? null;
+  return null;
 }
+
 export function summary(steps) {
   const unfinished = steps.filter((s) => !s.completed);
   return {
     done: steps.filter((s) => s.completed).length,
     total: steps.length,
     seconds: unfinished.reduce((n, s) => n + (remainingSeconds(s) ?? 0), 0),
-    unknown: unfinished.some(
-      (s) =>
-        remainingSeconds(s) === null ||
-        (s.durationMinutes == null && s.metadata?.partial),
-    ),
+    unknown: unfinished.some((s) => remainingSeconds(s) === null),
   };
 }
 export function duration(seconds) {
@@ -68,29 +53,4 @@ export function move(items, id, direction) {
   if (index < 0 || target < 0 || target >= sorted.length) return items;
   [sorted[index], sorted[target]] = [sorted[target], sorted[index]];
   return sorted.map((item, order) => ({ ...item, order }));
-}
-export function youtubeResource(value) {
-  try {
-    const url = new URL(value);
-    if (
-      ![
-        "youtube.com",
-        "www.youtube.com",
-        "m.youtube.com",
-        "youtu.be",
-        "www.youtu.be",
-      ].includes(url.hostname)
-    )
-      return null;
-    const playlist = url.searchParams.get("list");
-    if (playlist && /^[\w-]{10,100}$/.test(playlist))
-      return { kind: "playlist", id: playlist };
-    const id = url.hostname.endsWith("youtu.be")
-      ? url.pathname.slice(1)
-      : url.searchParams.get("v") ||
-        url.pathname.match(/^\/(?:shorts|embed|live)\/([\w-]+)/)?.[1];
-    return id && /^[\w-]{11}$/.test(id) ? { kind: "video", id } : null;
-  } catch {
-    return null;
-  }
 }

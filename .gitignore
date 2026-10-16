@@ -4,6 +4,5 @@ node_modules
 .env
 .env.*
 !.env.example
-supabase/.temp/
 playwright-report/
 test-results/

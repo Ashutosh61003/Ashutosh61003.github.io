@@ -6,39 +6,16 @@ import {
   remainingSeconds,
   nextStep,
   move,
-  youtubeResource,
   todayKey,
+  duration,
 } from "../src/dreams/model.js";
-import {
-  hashPassword,
-  issueToken,
-  verifyToken,
-  validateWorkspace,
-} from "../supabase/functions/dreams/security.ts";
-import {
-  isoSeconds,
-  fetchMetadata,
-} from "../supabase/functions/dreams/youtube.ts";
-const goal = {
-  id: "g",
-  title: "Learning",
-  description: "",
-  accent: "peach",
-  archived: false,
-  order: 0,
-};
+const goal = { id: "g", title: "Learning", archived: false, order: 0 };
 const step = {
   id: "s",
   goalId: "g",
   title: "A step",
-  kind: "task",
-  url: "",
-  notes: "",
   durationMinutes: null,
-  plannedDate: "",
   completed: false,
-  completedThrough: 0,
-  metadata: null,
   order: 0,
 };
 test("unknown duration is not zero; completed steps are excluded", () => {
@@ -52,18 +29,14 @@ test("unknown duration is not zero; completed steps are excluded", () => {
     { done: 1, total: 3, seconds: 720, unknown: true },
   );
 });
-test("playlist progress and manual override", () => {
-  const playlist = {
-    ...step,
-    kind: "playlist",
-    completedThrough: 1,
-    metadata: {
-      videos: [{ seconds: 60 }, { seconds: 120 }, { seconds: null }],
-    },
-  };
-  assert.equal(remainingSeconds(playlist), 120);
-  assert.equal(remainingSeconds({ ...playlist, durationMinutes: 5 }), 300);
-  assert.equal(remainingSeconds({ ...playlist, completedThrough: 3 }), 0);
+test("manual time is the only duration source", () => {
+  assert.equal(remainingSeconds({ ...step, durationMinutes: 75 }), 4500);
+  assert.equal(remainingSeconds({ ...step, metadata: { seconds: 900 } }), null);
+  assert.equal(
+    remainingSeconds({ ...step, durationMinutes: 75, completed: true }),
+    0,
+  );
+  assert.equal(duration(4500), "1h 15m");
 });
 test("continue honors pin, order, completion and archives", () => {
   const data = {
@@ -92,108 +65,133 @@ test("reordering preserves values and bounds", () => {
   ]);
   assert.deepEqual(move(original, "a", -1), original);
 });
-test("YouTube URLs are restricted to the provider", () => {
-  assert.equal(
-    youtubeResource("https://youtu.be/abcdefghijk").id,
-    "abcdefghijk",
-  );
-  assert.equal(
-    youtubeResource("https://youtube.com/playlist?list=PL123456789012").kind,
-    "playlist",
-  );
-  assert.equal(
-    youtubeResource("https://evil.example/watch?v=abcdefghijk"),
-    null,
-  );
-  assert.equal(youtubeResource("javascript:alert(1)"), null);
+test("local dates and empty workspace", () => {
   assert.equal(todayKey(new Date(2026, 9, 17)), "2026-10-17");
+  assert.deepEqual(emptyWorkspace(), {
+    goals: [],
+    steps: [],
+    pinnedStepId: null,
+  });
 });
-test("server validates URLs, goal references, dates, and duplicates", () => {
-  assert.deepEqual(validateWorkspace(emptyWorkspace()), emptyWorkspace());
-  const valid = { goals: [goal], steps: [step], pinnedStepId: null };
-  assert.equal(validateWorkspace(valid), valid);
-  for (const changed of [
-    { url: "javascript:alert(1)" },
-    { goalId: "missing" },
-    { plannedDate: "2026-02-30" },
-    { durationMinutes: -1 },
-  ])
-    assert.throws(() =>
-      validateWorkspace({ ...valid, steps: [{ ...step, ...changed }] }),
-    );
-  assert.throws(() => validateWorkspace({ ...valid, steps: [step, step] }));
+
+import { createFirebaseTransport } from "../src/dreams/firebase-transport.js";
+const config = {
+  projectId: "test-project",
+  apiKey: "test-public-key",
+  editorEmail: "editor@example.com",
+};
+const saved = (revision = 3) => ({
+  fields: {
+    stateJson: { stringValue: JSON.stringify(emptyWorkspace()) },
+    revision: { integerValue: String(revision) },
+  },
+  updateTime: "2026-10-17T00:00:00Z",
 });
-test("edit token expires and rejects tampering", async () => {
-  const secret = "test-only-secret-with-more-than-32-characters";
-  const session = await issueToken(secret, 1000);
-  assert.equal(await verifyToken(session.token, secret, 1001), true);
-  assert.equal(
-    await verifyToken(session.token, secret, session.expiresAt),
-    false,
-  );
-  assert.equal(await verifyToken(session.token + "x", secret, 1001), false);
-  assert.equal(await verifyToken(session.token, "another-secret", 1001), false);
-});
-test("password hashes are deterministic and salted", async () => {
-  const a = await hashPassword("test-password", "salt-a", 1000);
-  assert.equal(a, await hashPassword("test-password", "salt-a", 1000));
-  assert.notEqual(a, await hashPassword("test-password", "salt-b", 1000));
-});
-test("YouTube ISO duration", () => {
-  assert.equal(isoSeconds("PT1H2M3S"), 3723);
-  assert.equal(isoSeconds("P1DT1M"), 86460);
-  assert.equal(isoSeconds(undefined), null);
-});
-test("playlist pagination, batching, duplicates and unavailable videos", async () => {
-  const calls = [];
-  const ids = Array.from({ length: 55 }, (_, i) => `video${i}`);
-  const fetcher = async (input) => {
-    const url = new URL(input);
-    calls.push(url);
-    if (url.pathname.endsWith("/playlists"))
-      return Response.json({ items: [{ snippet: { title: "Learning" } }] });
-    if (url.pathname.endsWith("/playlistItems")) {
-      const second = !!url.searchParams.get("pageToken");
-      return Response.json({
-        items: (second ? [...ids.slice(50), ids[0]] : ids.slice(0, 50)).map(
-          (videoId) => ({ contentDetails: { videoId } }),
-        ),
-        ...(!second ? { nextPageToken: "next" } : {}),
-      });
-    }
+test("Firebase unlock discards refresh tokens and limits sessions to an hour", async () => {
+  let sent;
+  const request = createFirebaseTransport(config, async (url, init) => {
+    sent = JSON.parse(init.body);
     return Response.json({
-      items: url.searchParams
-        .get("id")
-        .split(",")
-        .filter((id) => id !== "video54")
-        .map((id) => ({
-          id,
-          snippet: { title: id },
-          contentDetails: { duration: "PT1M" },
-        })),
+      idToken: "id-token",
+      refreshToken: "must-not-persist",
+      expiresIn: "7200",
     });
-  };
-  const meta = await fetchMetadata(
-    { kind: "playlist", id: "playlist" },
-    "test",
-    fetcher,
+  });
+  const before = Date.now();
+  const session = await request("unlock", { password: "test-only" });
+  assert.equal(sent.email, config.editorEmail);
+  assert.equal(session.token, "id-token");
+  assert.equal(session.refreshToken, undefined);
+  assert.ok(
+    session.expiresAt <= Date.now() + 3600000 &&
+      session.expiresAt >= before + 3600000,
   );
-  assert.equal(meta.videos.length, 56);
-  assert.equal(meta.seconds, 55 * 60);
-  assert.equal(meta.partial, true);
-  assert.equal(calls.filter((u) => u.pathname.endsWith("/videos")).length, 2);
 });
-test("YouTube failures and private videos give actionable errors", async () => {
+test("Firebase wrong password and throttling give clear errors", async () => {
+  for (const [message, status] of [
+    ["INVALID_LOGIN_CREDENTIALS", 401],
+    ["TOO_MANY_ATTEMPTS_TRY_LATER", 429],
+  ]) {
+    const request = createFirebaseTransport(config, async () =>
+      Response.json({ error: { message } }, { status: 400 }),
+    );
+    await assert.rejects(
+      request("unlock", { password: "wrong" }),
+      (e) => e.status === status,
+    );
+  }
+});
+test("Firebase missing workspace starts empty and first save creates conditionally", async () => {
+  let write;
+  const request = createFirebaseTransport(config, async (url, init) => {
+    if (!init) return Response.json({ error: {} }, { status: 404 });
+    write = JSON.parse(init.body).writes[0];
+    return Response.json({ writeResults: [] });
+  });
+  assert.deepEqual((await request("read")).data, emptyWorkspace());
+  assert.equal(
+    (await request("save", { revision: 0, data: emptyWorkspace() }, "token"))
+      .revision,
+    1,
+  );
+  assert.deepEqual(write.currentDocument, { exists: false });
+});
+test("Firebase save uses update-time precondition and ID token", async () => {
+  let write, headers;
+  const request = createFirebaseTransport(config, async (url, init) => {
+    if (!init) return Response.json(saved());
+    write = JSON.parse(init.body).writes[0];
+    headers = init.headers;
+    return Response.json({ writeResults: [] });
+  });
+  const result = await request(
+    "save",
+    { revision: 3, data: emptyWorkspace() },
+    "id-token",
+  );
+  assert.equal(result.revision, 4);
+  assert.equal(write.currentDocument.updateTime, saved().updateTime);
+  assert.equal(headers.Authorization, "Bearer id-token");
+});
+test("Firebase detects revision conflicts before writes and concurrent commit conflicts", async () => {
+  let writes = 0;
+  const request = createFirebaseTransport(config, async (url, init) => {
+    if (!init) return Response.json(saved());
+    writes++;
+    return Response.json(
+      { error: { status: "FAILED_PRECONDITION" } },
+      { status: 400 },
+    );
+  });
   await assert.rejects(
-    fetchMetadata({ kind: "video", id: "abcdefghijk" }, "test", async () =>
-      Response.json({ items: [] }),
-    ),
-    /private or unavailable/,
+    request("save", { revision: 2, data: emptyWorkspace() }, "token"),
+    (e) => e.status === 409,
+  );
+  assert.equal(writes, 0);
+  await assert.rejects(
+    request("save", { revision: 3, data: emptyWorkspace() }, "token"),
+    (e) => e.status === 409,
+  );
+});
+test("Firebase unauthorized writes and oversized workspace fail safely", async () => {
+  const request = createFirebaseTransport(config, async (url, init) =>
+    !init
+      ? Response.json(saved())
+      : Response.json(
+          { error: { status: "PERMISSION_DENIED" } },
+          { status: 403 },
+        ),
   );
   await assert.rejects(
-    fetchMetadata({ kind: "video", id: "abcdefghijk" }, "test", async () =>
-      Response.json({}, { status: 403 }),
+    request("save", { revision: 3, data: emptyWorkspace() }, "expired-token"),
+    (e) => e.status === 401,
+  );
+  await assert.rejects(
+    request(
+      "save",
+      { revision: 3, data: { notes: "x".repeat(900001) } },
+      "token",
     ),
-    /unavailable/,
+    (e) => e.status === 413,
   );
 });
