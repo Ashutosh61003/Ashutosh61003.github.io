@@ -354,3 +354,27 @@ test("editing expires automatically", async ({ page, context }) => {
     page.getByText("Edit session ended. Unlock again to save your changes."),
   ).toBeVisible();
 });
+
+test("retry saves the latest form text after a failure", async ({
+  page,
+  context,
+}) => {
+  const faults = {};
+  await mock(context, undefined, faults);
+  await page.goto("/Dreams");
+  await unlock(page);
+  await page.getByRole("button", { name: "Add goal", exact: true }).click();
+  await page.getByLabel("Title", { exact: true }).fill("Original draft");
+  faults.failSave = true;
+  await page.getByRole("button", { name: "Save goal", exact: true }).click();
+  await expect(
+    page.getByRole("dialog").getByText("Network unavailable. Retry."),
+  ).toBeVisible();
+  await page.getByLabel("Title", { exact: true }).fill("Updated draft");
+  faults.failSave = false;
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: "Retry save", exact: true })
+    .click();
+  await expect(page.locator(".dr-goal")).toContainText("Updated draft");
+});

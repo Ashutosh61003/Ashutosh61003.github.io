@@ -442,9 +442,11 @@ export default function Dreams() {
           <button
             type="button"
             disabled={!editing || status === "Saving…"}
-            onClick={() =>
-              save(pending.data, pending.closeAfter, pending.revision)
-            }
+            onClick={(event) => {
+              if (dialog === "goal" && draft) goalSave(event);
+              else if (dialog === "step" && draft) stepSave(event);
+              else save(pending.data, pending.closeAfter, pending.revision);
+            }}
           >
             Retry save
           </button>
@@ -1270,6 +1272,7 @@ export default function Dreams() {
               ? "Its steps and notes will also be deleted."
               : "This step and its notes will be deleted."}
           </p>
+          {saveFeedback}
           <div className="dr-dialog-actions">
             <button
               className="dr-edit"
