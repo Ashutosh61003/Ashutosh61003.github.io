@@ -1,0 +1,29 @@
+{
+  "version": "5",
+  "remote": {
+    "https://esm.sh/@supabase/supabase-js@2.57.4": "05a369085eb4a4c99d85ccece97f0cf1e05357122e0e74373da1f0e91b014902"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@playwright/test@^1.64.1",
+        "npm:@types/react-dom@^18.2.22",
+        "npm:@types/react@^18.2.66",
+        "npm:@use-gesture/react@^10.3.1",
+        "npm:@vitejs/plugin-react@^4.2.1",
+        "npm:eslint-plugin-react-hooks@^4.6.0",
+        "npm:eslint-plugin-react-refresh@~0.4.6",
+        "npm:eslint-plugin-react@^7.34.1",
+        "npm:eslint@^8.57.0",
+        "npm:framer-motion@^12.23.26",
+        "npm:gsap@^3.12.5",
+        "npm:lenis@^1.3.25",
+        "npm:lucide-react@0.344",
+        "npm:react-dom@^18.2.0",
+        "npm:react-router-dom@^6.22.3",
+        "npm:react@^18.2.0",
+        "npm:vite@^5.2.0"
+      ]
+    }
+  }
+}

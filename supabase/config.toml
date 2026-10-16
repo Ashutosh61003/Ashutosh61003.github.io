@@ -1,0 +1,4 @@
+project_id = "dreams"
+
+[functions.dreams]
+verify_jwt = false
