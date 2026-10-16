@@ -5,9 +5,13 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build && cp dist/index.html dist/404.html && for route in work blogs identity thoughts project projects photography contact; do mkdir -p dist/$route && cp dist/index.html dist/$route/index.html; done",
+        "build": "node scripts/build.mjs",
         "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "test:dreams": "node --experimental-strip-types --test tests/dreams.test.mjs",
+        "test:dreams:browser": "playwright test",
+        "lint:dreams": "eslint --no-eslintrc --config .eslintrc.dreams.cjs src/dreams src/App.jsx scripts tests playwright.config.js --ext js,jsx,mjs --max-warnings 0",
+        "build:pages-root": "node scripts/sync-pages-root.mjs"
     },
     "dependencies": {
         "@use-gesture/react": "^10.3.1",
@@ -20,6 +24,7 @@
         "react-router-dom": "^6.22.3"
     },
     "devDependencies": {
+        "@playwright/test": "^1.64.1",
         "@types/react": "^18.2.66",
         "@types/react-dom": "^18.2.22",
         "@vitejs/plugin-react": "^4.2.1",
