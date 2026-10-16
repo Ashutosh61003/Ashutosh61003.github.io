@@ -9,7 +9,7 @@ export function createFirebaseTransport(
     error.status = status;
     return error;
   }
-  async function decode(response) {
+  async function decode(response, action = "save") {
     const result = await response.json().catch(() => ({}));
     if (!response.ok) {
       const code = result.error?.status || result.error?.message || "";
@@ -23,7 +23,12 @@ export function createFirebaseTransport(
           409,
         );
       if (response.status === 401 || response.status === 403)
-        throw failure("Unlock editing again to save your changes.", 401);
+        throw failure(
+          action === "read"
+            ? "Workspace access is not configured yet."
+            : "Unlock editing again to save your changes.",
+          401,
+        );
       throw failure(
         "Could not connect to your workspace. Please retry.",
         response.status,
@@ -52,7 +57,7 @@ export function createFirebaseTransport(
     const response = await fetcher(documentUrl);
     if (response.status === 404)
       return { data: emptyWorkspace(), revision: 0, updateTime: null };
-    return unpack(await decode(response));
+    return unpack(await decode(response, "read"));
   }
   async function request(action, payload = {}, token) {
     if (action === "read") return read();
