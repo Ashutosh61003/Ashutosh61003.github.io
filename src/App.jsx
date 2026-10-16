@@ -1,15 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import LiquidFilter from './components/LiquidFilter';
-import Home from './pages/Home';
-import Identity from './pages/Identity';
-import Thoughts from './pages/Thoughts';
-import Projects from './pages/Projects';
-import Work from './pages/Work';
-import Photography from './pages/Photography';
-import Contact from './pages/Contact';
-import './styles/white-theme.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import Navbar from "./components/Navbar";
+import LiquidFilter from "./components/LiquidFilter";
+import Home from "./pages/Home";
+import Identity from "./pages/Identity";
+import Thoughts from "./pages/Thoughts";
+import Projects from "./pages/Projects";
+import Work from "./pages/Work";
+import Photography from "./pages/Photography";
+import Contact from "./pages/Contact";
+import "./styles/white-theme.css";
 
 // Scroll to top on route change, or smoothly to hash targets.
 const ScrollToTop = () => {
@@ -17,15 +22,15 @@ const ScrollToTop = () => {
 
   React.useEffect(() => {
     if (!hash) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
     const targetId = decodeURIComponent(hash.slice(1));
     window.setTimeout(() => {
       document.getElementById(targetId)?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+        behavior: "smooth",
+        block: "start",
       });
     }, 0);
   }, [hash, pathname]);
@@ -33,9 +38,31 @@ const ScrollToTop = () => {
   return null;
 };
 
-function App() {
+const Dreams = React.lazy(() => import("./dreams/Dreams"));
+
+function Layout() {
+  const { pathname } = useLocation();
+  const dreams = /^\/dreams\/?$/i.test(pathname);
+  React.useLayoutEffect(() => {
+    document.documentElement.classList.toggle("dreams-mode", dreams);
+    return () => document.documentElement.classList.remove("dreams-mode");
+  }, [dreams]);
+  if (dreams)
+    return (
+      <React.Suspense
+        fallback={
+          <div style={{ padding: 40, color: "#292724" }}>Opening Dreams…</div>
+        }
+      >
+        <Dreams />
+      </React.Suspense>
+    );
+  return <Portfolio />;
+}
+
+function Portfolio() {
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <LiquidFilter />
       <Navbar />
@@ -52,6 +79,14 @@ function App() {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Layout />
     </Router>
   );
 }
