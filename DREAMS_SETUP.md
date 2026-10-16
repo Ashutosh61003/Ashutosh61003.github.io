@@ -2,9 +2,16 @@
 
 Dreams now uses **Firebase Authentication + Cloud Firestore**. All durations are entered manually in minutes. Video and playlist links are ordinary saved resources; no YouTube API or billing-enabled Cloud Functions are needed.
 
-## Current activation blocker
+## Provisioned through the browser
 
-The signed-in Google account has reached its Firebase project creation limit. Choose an existing Firebase project explicitly, or switch accounts/create an additional project after requesting a quota increase. No existing project has been changed or deleted.
+- Project: **AIChatGemma** (`aichatgemma`), reused because this Google account has reached its project quota.
+- Web app: **Dreams**, app ID `1:632551270983:web:e12f6a2a483f8b99d0df62`.
+- Firestore: Standard edition, default database, region **asia-south1 (Mumbai)**, created in production mode on the existing Spark plan.
+- Email/password sign-in: enabled. The owner has the Add user form open for `dreams-editor@ashutoshsrivastava.me` and must enter and submit the password.
+- Public web configuration is already committed in `src/dreams/firebase-config.json`; no private Google credentials are stored in the repository.
+- Remaining: create the editor, copy its UID into the rules, publish rules, verify actual saving and cross-device reads, and deploy the site.
+
+Neither AIChatGemma nor Magnetile was deleted. Google keeps deleted projects in the quota during the 30-day recovery window, so deletion would not have solved today's quota issue. The pre-existing iOS app was preserved. The newly created Firestore database had no existing collections and started with deny-all rules.
 
 ## Browser setup
 
