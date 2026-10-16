@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function editor() {
       return request.auth != null
-        && request.auth.uid == 'REPLACE_WITH_DREAMS_EDITOR_UID'
+        && request.auth.uid == 'AvqwmPY304eoBGWcOk536dCWgYq1'
         && request.time < timestamp.value(request.auth.token.auth_time * 1000) + duration.value(1, 'h');
     }
     match /dreams/workspace {
