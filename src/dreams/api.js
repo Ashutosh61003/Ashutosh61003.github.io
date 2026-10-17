@@ -4,7 +4,7 @@ import { createFirebaseTransport } from "./firebase-transport";
 // Firebase web configuration identifies the project; it contains no private credentials.
 const projectId =
   import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfig.projectId;
-const apiKey = import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfig.apiKey;
+const apiKey = import.meta.env.VITE_FIREBASE_API_KEY || "";
 const editorEmail =
   import.meta.env.VITE_DREAMS_EDITOR_EMAIL || firebaseConfig.editorEmail;
 // A mock HTTP endpoint is used only by the browser test suite.

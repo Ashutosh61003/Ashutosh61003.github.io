@@ -8,7 +8,7 @@ Dreams now uses **Firebase Authentication + Cloud Firestore**. All durations are
 - Web app: **Dreams**, app ID `1:632551270983:web:e12f6a2a483f8b99d0df62`.
 - Firestore: Standard edition, default database, region **asia-south1 (Mumbai)**, created in production mode on the existing Spark plan.
 - Email/password sign-in: enabled. The owner created `dreams-editor@ashutoshsrivastava.me`; its UID is configured in `firestore.rules`.
-- Public web configuration is already committed in `src/dreams/firebase-config.json`; no private Google credentials are stored in the repository.
+- Project metadata is in `src/dreams/firebase-config.json`. The API key belongs only in the ignored local `.env` file or the GitHub Actions secret `VITE_FIREBASE_API_KEY`.
 - Rules are published. Real Firebase sign-in, goal/step saving, manual time, completion, and read-only viewing from a separate session have been verified. The rules playground denied an anonymous update. Temporary verification content was removed, leaving an empty workspace.
 
 Neither AIChatGemma nor Magnetile was deleted. Google keeps deleted projects in the quota during the 30-day recovery window, so deletion would not have solved today's quota issue. The pre-existing iOS app was preserved. The newly created Firestore database had no existing collections and started with deny-all rules.
@@ -16,7 +16,7 @@ Neither AIChatGemma nor Magnetile was deleted. Google keeps deleted projects in 
 ## Browser setup
 
 1. Select the approved Firebase project.
-2. Register a web app named Dreams. Copy its public API key and project ID into `src/dreams/firebase-config.json`. That config can be committed; it contains no password or private key.
+2. Register a web app named Dreams. Copy its API key into `VITE_FIREBASE_API_KEY` in an ignored `.env` file. Use `.env.example` as a template; never commit the actual key. Project ID and owner email can remain in `src/dreams/firebase-config.json`.
 3. Open **Authentication**, enable Email/Password, and add the editor user `dreams-editor@ashutoshsrivastava.me`. The owner must enter and submit the chosen password in the console; browser automation hands off new credential creation.
 4. Copy the user's UID into `firestore.rules`, replacing its explicit placeholder.
 5. Create a Standard Cloud Firestore database in production mode if the project has none. Use the default database. Do not upgrade billing.
@@ -26,7 +26,7 @@ Neither AIChatGemma nor Magnetile was deleted. Google keeps deleted projects in 
 
 ## Deployment
 
-The public Firebase config is bundled with the Dreams page. Optional root `.env.local` overrides are listed in `.env.example` for local development. No secret configuration is required for GitHub Actions.
+The old Firebase features are not part of the current site. Their API key is read from an ignored `.env` file, and Actions uses an encrypted repository secret. If Firebase browser features are re-enabled, Vite will embed the `VITE_` key in client code: API restrictions and Firebase rules are still required. Removing a key from the current checkout does not erase earlier Git history; rotate/revoke an exposed key to invalidate it.
 
 The current Pages configuration publishes from the repository root alongside the Actions workflow. Run `npm run build:pages-root` before committing frontend changes while that setting remains in place; this updates root publication files to the same build and preserves older hashed assets for cached HTML. The custom Actions workflow still builds and publishes `dist`.
 

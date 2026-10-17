@@ -13,7 +13,7 @@ const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID || config.projectId;
 const app = initializeApp(
   {
     projectId,
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || config.apiKey,
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
     authDomain: `${projectId}.firebaseapp.com`,
     appId: "1:632551270983:web:e12f6a2a483f8b99d0df62",
   },
