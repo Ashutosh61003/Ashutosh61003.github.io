@@ -67,3 +67,9 @@ Security tests cover public/draft isolation, fixed owner permissions, forged rol
 - Archive/unpublish is provided for conversations and discussion spaces. Recursive permanent removal of nested histories, bulk export and account-erasure workflows require a trusted server/admin operation; none is exposed as an unsafe client-side shortcut.
 - Stable content URLs work through the existing Pages SPA fallback. New arbitrary content-detail URLs receive GitHub Pages' HTTP 404 before the SPA renders. Per-entry server-rendered SEO/social previews and reliable HTTP 200 deep links would require a host with rewrites (for example Firebase Hosting) or generated detail pages on publish. The current hosting is deliberately preserved; no claim of server rendering is made.
 - Public sections start honestly empty until the owner publishes. No fake engagement, participants, testimonials, beliefs or events are included.
+
+## Provisioning completed in this session
+
+The owner approved publication of the new permissions. The updated rules were published in the existing Firebase console, and `ashutoshsrivastava.me` was added to authorized Google sign-in domains. Six required composite indexes were created for recent/featured content, typed feeds, story chronology, conversations, and spaces. The backlinks query succeeds using existing automatic indexes, so an unnecessary extra composite index was omitted. Anonymous access to private conversation documents was verified denied against the live project.
+
+No extra administrator was created. The account `dreams-editor@ashutoshsrivastava.me` retains its existing UID and password. Initial project import is available after owner sign-in; no personal opinions or events were seeded.
