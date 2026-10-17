@@ -1,16 +1,19 @@
-# React + Vite
+# Ashutosh Srivastava — personal website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A minimal personal space for current activities, writing, beliefs, projects, life events, and conversations. Built with React, Vite, React Router, Firebase Authentication and Cloud Firestore.
 
-Currently, two official plugins are available:
+- `/` — current life and recent published content
+- `/about`, `/opinions`, `/projects`, `/beliefs`, `/story` — public reading and connected entries
+- `/portfolio` — original professional portfolio, preserved separately
+- `/connect`, `/messages`, `/spaces` — contact, private communication and discussions
+- `/admin` — existing owner's content dashboard
+- `/dreams` — original personal Dreams workspace
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```sh
+npm ci
+npm run dev
+```
 
-## React Compiler
+See [PERSONAL_PLATFORM.md](PERSONAL_PLATFORM.md) for the inspected architecture, data model, owner identity, Firebase deployment steps, test commands, hosting details, and first-release boundaries. Live interactive features require publishing the accompanying Firebase rules and indexes and authorizing the custom domain for Google sign-in.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Never commit passwords, service-account keys or private Firebase credentials. The committed Firebase web configuration only identifies the public client application.

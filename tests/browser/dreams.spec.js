@@ -263,7 +263,7 @@ test("portfolio retains blue theme and navigation", async ({
   context,
 }) => {
   await mock(context);
-  await page.goto("/");
+  await page.goto("/portfolio");
   await expect(page.locator("html")).not.toHaveClass(/dreams-mode/);
   await expect(page.locator("nav").first()).toBeVisible();
   await expect(page.getByRole("link", { name: /dreams/i })).toHaveCount(0);

@@ -1,13 +1,12 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function editor() {
-      return request.auth != null
-        && request.auth.uid == 'AvqwmPY304eoBGWcOk536dCWgYq1'
-        && request.time < timestamp.value(request.auth.token.auth_time * 1000) + duration.value(1, 'h');
-    }
+    function signedIn() { return request.auth != null; }
+    function admin() { return signedIn() && request.auth.uid == 'AvqwmPY304eoBGWcOk536dCWgYq1'; }
+    function interactive() { return admin() || (signedIn() && request.auth.token.firebase.sign_in_provider == 'google.com' && request.auth.token.email_verified == true); }
+    function bounded() { return request.query.limit != null && request.query.limit <= 100; }
+    function editor() { return admin() && request.time < timestamp.value(request.auth.token.auth_time * 1000) + duration.value(1, 'h'); }
     match /dreams/workspace {
-      // Only this personal workspace is publicly readable, as requested.
       allow get: if true;
       allow list: if false;
       allow create: if editor() && valid() && request.resource.data.revision == 1;
@@ -15,13 +14,148 @@ service cloud.firestore {
       allow delete: if false;
       function valid() {
         return request.resource.data.keys().hasOnly(['stateJson', 'revision'])
-          && request.resource.data.stateJson is string
-          && request.resource.data.stateJson.size() <= 900000
+          && request.resource.data.stateJson is string && request.resource.data.stateJson.size() <= 900000
           && request.resource.data.revision is int;
       }
     }
-    // This file is intended for a dedicated project. If an existing project is
-    // selected, preserve its other collection rules and add only the match above.
+    match /personalContent/{id} {
+      allow get: if admin() || resource.data.published == true;
+      allow list: if bounded() && (admin() || resource.data.published == true);
+      allow create: if admin() && validContent() && request.resource.data.revision == 1 && request.resource.data.createdAt == request.time;
+      allow update: if admin() && validContent() && request.resource.data.revision == resource.data.revision + 1 && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if admin();
+      function validContent() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['type','title','summary','body','published','featured','tags','relatedIds','links','format','attribution','reasoning','date','period','category','projectStatus','collaborators','image','revision','updatedAt','createdAt','sortDate'])
+          && d.type in ['opinions','beliefs','projects','story'] && d.title is string && d.title.size() > 0 && d.title.size() <= 180
+          && d.summary is string && d.summary.size() <= 600 && d.body is string && d.body.size() > 0 && d.body.size() <= 60000
+          && d.published is bool && d.featured is bool && d.tags is list && d.tags.size() <= 30
+          && d.relatedIds is list && d.relatedIds.size() <= 30 && d.links is list && d.links.size() <= 20
+          && d.reasoning is string && d.reasoning.size() <= 20000 && d.image is string && d.image.size() <= 2000
+          && d.date is string && d.date.size() <= 10 && d.period is string && d.period.size() <= 100
+          && d.format is string && d.attribution is string && d.attribution.size() <= 200
+          && d.category is string && d.category.size() <= 100 && d.collaborators is string && d.collaborators.size() <= 500
+          && d.projectStatus in ['Exploring','Planned','Building','Active','Completed','Archived']
+          && d.revision is int && d.updatedAt == request.time;
+      }
+    }
+    match /personalSettings/site {
+      allow get: if true;
+      allow list, delete: if false;
+      allow create, update: if admin() && validSettings();
+      function validSettings() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['introduction','about','doing','learning','building','exploring','tags','categories','socials','updatedAt'])
+          && d.introduction is string && d.introduction.size() <= 600 && d.about is string && d.about.size() <= 30000
+          && d.doing is string && d.doing.size() <= 600 && d.learning is string && d.learning.size() <= 600
+          && d.building is string && d.building.size() <= 600 && d.exploring is string && d.exploring.size() <= 600
+          && d.tags is list && d.tags.size() <= 30 && d.categories is list && d.categories.size() <= 30
+          && d.socials is list && d.socials.size() <= 20 && d.updatedAt == request.time;
+      }
+    }
+    match /personalUsers/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || admin());
+      allow list: if admin() && bounded();
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['displayName','photoURL','updatedAt'])
+        && request.resource.data.displayName is string && request.resource.data.displayName.size() <= 100
+        && request.resource.data.photoURL is string && request.resource.data.photoURL.size() <= 2000
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if signedIn() && (request.auth.uid == uid || admin());
+    }
+    match /personalConversations/{uid} {
+      function own() { return signedIn() && request.auth.uid == uid; }
+      function validConversation() {
+        let d = request.resource.data;
+        return interactive() && d.keys().hasOnly(['ownerId','ownerName','ownerPhoto','createdAt','blocked','adminReadAt','userReadAt','lastMessage','lastMessageAt','lastMessageId','lastSenderId','archived'])
+          && d.ownerId == uid && d.ownerName is string && d.ownerName.size() <= 100
+          && d.ownerPhoto is string && d.ownerPhoto.size() <= 2000
+          && d.lastMessage is string && d.lastMessage.size() > 0 && d.lastMessage.size() <= 4000
+          && d.lastMessageId is string && d.lastMessageId.size() <= 100
+          && d.lastMessageAt == request.time && d.lastSenderId == request.auth.uid && d.archived == false
+          && getAfter(/databases/$(database)/documents/personalConversations/$(uid)/messages/$(d.lastMessageId)).data.text == d.lastMessage
+          && getAfter(/databases/$(database)/documents/personalConversations/$(uid)/messages/$(d.lastMessageId)).data.createdAt == request.time;
+      }
+      allow get: if admin() || own();
+      allow list: if bounded() && (admin() || (signedIn() && resource.data.ownerId == request.auth.uid));
+      allow create: if own() && validConversation() && request.resource.data.createdAt == request.time
+        && request.resource.data.blocked == false && request.resource.data.adminReadAt == null && request.resource.data.userReadAt == request.time;
+      allow update: if (admin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['archived','blocked','adminReadAt'])
+          && request.resource.data.archived is bool && request.resource.data.blocked is bool
+          && (request.resource.data.adminReadAt == resource.data.adminReadAt || request.resource.data.adminReadAt == request.time))
+        || (own() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['userReadAt']) && request.resource.data.userReadAt == request.time)
+        || ((admin() || own()) && validConversation()
+          && request.resource.data.ownerId == resource.data.ownerId && request.resource.data.ownerName == resource.data.ownerName
+          && request.resource.data.ownerPhoto == resource.data.ownerPhoto && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.blocked == resource.data.blocked
+          && ((admin() && request.resource.data.userReadAt == resource.data.userReadAt && request.resource.data.adminReadAt == request.time)
+            || (own() && !resource.data.blocked && request.resource.data.adminReadAt == resource.data.adminReadAt
+              && request.resource.data.userReadAt == request.time && request.time >= resource.data.lastMessageAt + duration.value(5,'s'))));
+      allow delete: if false;
+      match /messages/{messageId} {
+        function permitted() { return signedIn() && (request.auth.uid == uid || admin()); }
+        allow get: if permitted();
+        allow list: if permitted() && bounded();
+        allow create: if permitted() && interactive() && request.resource.data.keys().hasOnly(['text','senderId','createdAt','kind'])
+          && request.resource.data.text is string && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 4000
+          && request.resource.data.senderId == request.auth.uid && request.resource.data.createdAt == request.time
+          && request.resource.data.kind in ['message','idea']
+          && getAfter(/databases/$(database)/documents/personalConversations/$(uid)).data.lastMessageId == messageId
+          && getAfter(/databases/$(database)/documents/personalConversations/$(uid)).data.lastSenderId == request.auth.uid
+          && getAfter(/databases/$(database)/documents/personalConversations/$(uid)).data.lastMessageAt == request.time;
+        allow update, delete: if false;
+      }
+    }
+    match /personalSpaces/{spaceId} {
+      function space() { return get(/databases/$(database)/documents/personalSpaces/$(spaceId)).data; }
+      function member() { return signedIn() && exists(/databases/$(database)/documents/personalSpaces/$(spaceId)/members/$(request.auth.uid)) && !exists(/databases/$(database)/documents/personalSpaces/$(spaceId)/bans/$(request.auth.uid)); }
+      function visible() { return admin() || space().published == true; }
+      allow get: if admin() || resource.data.published == true;
+      allow list: if bounded() && (admin() || resource.data.published == true);
+      allow create, update: if admin() && request.resource.data.keys().hasOnly(['title','description','cover','status','published','createdAt','updatedAt'])
+        && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 180
+        && request.resource.data.description is string && request.resource.data.description.size() <= 4000
+        && request.resource.data.cover is string && request.resource.data.cover.size() <= 2000
+        && request.resource.data.status in ['Open','Closed','Archived'] && request.resource.data.published is bool
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+      match /members/{uid} {
+        allow get: if signedIn() && (request.auth.uid == uid || admin() || (member() && visible()));
+        allow list: if bounded() && visible() && (admin() || member());
+        allow create: if interactive() && request.auth.uid == uid && visible() && space().status == 'Open'
+          && !exists(/databases/$(database)/documents/personalSpaces/$(spaceId)/bans/$(uid))
+          && request.resource.data.keys().hasOnly(['uid','displayName','photoURL','joinedAt','lastSentAt','lastMessageId'])
+          && request.resource.data.uid == uid && request.resource.data.displayName is string && request.resource.data.displayName.size() <= 100
+          && request.resource.data.photoURL is string && request.resource.data.photoURL.size() <= 2000
+          && request.resource.data.joinedAt == request.time && request.resource.data.lastSentAt == null && request.resource.data.lastMessageId == '';
+        allow update: if signedIn() && request.auth.uid == uid && member() && visible() && space().status == 'Open'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastSentAt','lastMessageId'])
+          && request.resource.data.lastSentAt == request.time
+          && (resource.data.lastSentAt == null || request.time >= resource.data.lastSentAt + duration.value(5,'s'))
+          && getAfter(/databases/$(database)/documents/personalSpaces/$(spaceId)/messages/$(request.resource.data.lastMessageId)).data.senderId == uid
+          && getAfter(/databases/$(database)/documents/personalSpaces/$(spaceId)/messages/$(request.resource.data.lastMessageId)).data.createdAt == request.time;
+        allow delete: if admin() || (signedIn() && request.auth.uid == uid);
+      }
+      match /messages/{messageId} {
+        allow get: if visible() && (admin() || member());
+        allow list: if bounded() && visible() && (admin() || member());
+        allow create: if member() && visible() && space().status == 'Open'
+          && request.resource.data.keys().hasOnly(['text','senderId','displayName','createdAt'])
+          && request.resource.data.senderId == request.auth.uid && request.resource.data.text is string
+          && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 2000
+          && request.resource.data.displayName is string && request.resource.data.displayName.size() <= 100
+          && request.resource.data.createdAt == request.time
+          && getAfter(/databases/$(database)/documents/personalSpaces/$(spaceId)/members/$(request.auth.uid)).data.lastMessageId == messageId
+          && getAfter(/databases/$(database)/documents/personalSpaces/$(spaceId)/members/$(request.auth.uid)).data.lastSentAt == request.time;
+        allow update: if false;
+        allow delete: if admin();
+      }
+      match /bans/{uid} {
+        allow get: if admin() || (signedIn() && request.auth.uid == uid);
+        allow list: if admin() && bounded();
+        allow create, update, delete: if admin();
+      }
+    }
     match /{document=**} { allow read, write: if false; }
   }
 }

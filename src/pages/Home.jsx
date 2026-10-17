@@ -29,7 +29,7 @@ const stackItems = [
     },
     {
         eyebrow: 'Portfolio projects',
-        href: '/projects',
+        href: '/portfolio/projects',
         title: 'AI, iOS, analytics, travel, cricket, agriculture, and healthcare.',
         copy: 'Projects include AIChatGemma, CherryChat, CricAbode, SCOPE, RailOne Super Route, Provider Data Validation, and Fire Response Vehicle.',
         tags: ['AI workflows', 'SwiftUI', 'Product strategy']
@@ -38,7 +38,7 @@ const stackItems = [
 
 const flowingItems = [
     { label: 'Work', href: '/work' },
-    { label: 'Projects', href: '/projects' },
+    { label: 'Projects', href: '/portfolio/projects' },
     { label: 'Contact', href: '/contact' },
     { label: 'Resume', href: '/files/AshutoshSrivastavaResume.pdf', external: true }
 ];
@@ -141,7 +141,7 @@ const Home = () => {
                         user discovery, product strategy, analytics, and growth experiments.
                     </p>
                     <div className="home-cta-row">
-                        <a href="/projects">
+                        <a href="/portfolio/projects">
                             Projects
                             <ArrowUpRight size={18} />
                         </a>

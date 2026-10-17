@@ -6,3 +6,7 @@ node_modules
 !.env.example
 playwright-report/
 test-results/
+
+# Local Firebase emulator output
+*-debug.log
+.firebase/

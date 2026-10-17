@@ -7,6 +7,14 @@ const html = await readFile(resolve(output, "index.html"), "utf8");
 await writeFile(resolve(output, "404.html"), html);
 for (const route of [
   "portfolio",
+  "portfolio/projects",
+  "about",
+  "opinions",
+  "beliefs",
+  "connect",
+  "messages",
+  "spaces",
+  "admin",
   "story",
   "work",
   "blogs",
@@ -21,7 +29,7 @@ for (const route of [
 ]) {
   const folder = resolve(output, route);
   await mkdir(folder, { recursive: true });
-  const page = /dreams/i.test(route)
+  const page = /^(dreams|admin|messages)$/i.test(route)
     ? html
         .replace(
           "<head>",
@@ -29,7 +37,7 @@ for (const route of [
         )
         .replace(
           "<title>Ashutosh Srivastava</title>",
-          "<title>Dreams · Ashutosh</title>",
+          `<title>${/dreams/i.test(route) ? "Dreams" : route[0].toUpperCase() + route.slice(1)} · Ashutosh</title>`,
         )
     : html;
   await writeFile(resolve(folder, "index.html"), page);

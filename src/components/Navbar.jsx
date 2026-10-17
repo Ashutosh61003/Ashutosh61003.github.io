@@ -111,7 +111,7 @@ const Navbar = () => {
 
     const links = [
         { name: 'Portfolio', path: '/portfolio', Icon: Home },
-        { name: 'Projects', path: '/projects', Icon: FolderKanban },
+        { name: 'Projects', path: '/portfolio/projects', Icon: FolderKanban },
         { name: 'Work', path: '/work', Icon: Briefcase },
         { name: 'Contact', path: '/contact', Icon: Mail },
     ];

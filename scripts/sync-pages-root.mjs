@@ -18,8 +18,16 @@ try {
     await cp(join(output, file), file);
   for (const route of [
     "portfolio",
-  "story",
-  "work",
+    "portfolio/projects",
+    "about",
+    "opinions",
+    "beliefs",
+    "connect",
+    "messages",
+    "spaces",
+    "admin",
+    "story",
+    "work",
     "blogs",
     "identity",
     "thoughts",
