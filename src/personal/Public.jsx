@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useLive, usePaged, usePersonal } from "./hooks";
-import {
-  contentRef,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  where,
-} from "./data";
-import { errorMessage, PROJECT_STATUSES, safeUrl } from "./model";
+import { contentRef, doc, getDoc, limit, orderBy, query, where } from "./data";
+import { PROJECT_STATUSES, safeUrl } from "./model";
 import { EntryList, Markdown, Notice, Socials, Pagination } from "./Shared";
 const descriptions = {
   opinions: [
@@ -314,49 +305,43 @@ export function DetailPage({ type }) {
     `${type}-${id}`,
   );
   const item = items.find((i) => i.type === type);
-  const [related, setRelated] = useState([]),
-    [relatedError, setRelatedError] = useState("");
+  const [directRelated, setDirectRelated] = useState([]);
+  const backlinks = usePaged(
+    item
+      ? query(
+          contentRef,
+          where("published", "==", true),
+          where("relatedIds", "array-contains", id),
+        )
+      : null,
+    `backlinks-${id}-${!!item}`,
+    20,
+  );
+  const related = [
+    ...new Map(
+      [...directRelated, ...backlinks.items]
+        .filter((entry) => entry.id !== id)
+        .map((entry) => [entry.id, entry]),
+    ).values(),
+  ];
   useEffect(() => {
     let active = true;
-    setRelated([]);
-    setRelatedError("");
+    setDirectRelated([]);
     if (!item) return;
-    (async () => {
-      const direct = await Promise.all(
-        (item.relatedIds || []).map(async (relatedId) => {
-          try {
-            const d = await getDoc(doc(contentRef, relatedId));
-            return d.exists() && d.data().published
-              ? { id: d.id, ...d.data() }
-              : null;
-          } catch {
-            return null;
-          }
-        }),
-      );
-      let back = [];
-      try {
-        const results = await getDocs(
-          query(
-            contentRef,
-            where("published", "==", true),
-            where("relatedIds", "array-contains", id),
-            limit(20),
-          ),
-        );
-        back = results.docs.map((d) => ({ id: d.id, ...d.data() }));
-      } catch (e) {
-        if (active) setRelatedError(errorMessage(e));
-      }
-      if (active)
-        setRelated([
-          ...new Map(
-            [...direct.filter(Boolean), ...back]
-              .filter((i) => i.id !== id)
-              .map((i) => [i.id, i]),
-          ).values(),
-        ]);
-    })();
+    Promise.all(
+      (item.relatedIds || []).map(async (relatedId) => {
+        try {
+          const d = await getDoc(doc(contentRef, relatedId));
+          return d.exists() && d.data().published
+            ? { id: d.id, ...d.data() }
+            : null;
+        } catch {
+          return null;
+        }
+      }),
+    ).then((entries) => {
+      if (active) setDirectRelated(entries.filter(Boolean));
+    });
     return () => {
       active = false;
     };
@@ -427,13 +412,14 @@ export function DetailPage({ type }) {
           </Link>
         ))}
       </div>
-      {!!related.length && (
+      {(!!related.length || backlinks.page > 1) && (
         <section className="journal-section">
           <h2>Connected ideas</h2>
           <EntryList items={related} />
+          <Pagination pager={backlinks} nextLabel="More connected entries" />
         </section>
       )}
-      <Notice error>{relatedError}</Notice>
+      <Notice error>{backlinks.error}</Notice>
     </article>
   );
 }
