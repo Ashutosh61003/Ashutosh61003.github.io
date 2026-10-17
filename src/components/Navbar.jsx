@@ -110,7 +110,7 @@ const Navbar = () => {
     }, [isExpanded, scrolled]);
 
     const links = [
-        { name: 'Home', path: '/', Icon: Home },
+        { name: 'Portfolio', path: '/portfolio', Icon: Home },
         { name: 'Projects', path: '/projects', Icon: FolderKanban },
         { name: 'Work', path: '/work', Icon: Briefcase },
         { name: 'Contact', path: '/contact', Icon: Mail },

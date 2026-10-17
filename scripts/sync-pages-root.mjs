@@ -17,7 +17,9 @@ try {
   for (const file of ["index.html", "404.html"])
     await cp(join(output, file), file);
   for (const route of [
-    "work",
+    "portfolio",
+  "story",
+  "work",
     "blogs",
     "identity",
     "thoughts",

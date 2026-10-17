@@ -6,6 +6,8 @@ await build({ build: { outDir: resolve(output) } });
 const html = await readFile(resolve(output, "index.html"), "utf8");
 await writeFile(resolve(output, "404.html"), html);
 for (const route of [
+  "portfolio",
+  "story",
   "work",
   "blogs",
   "identity",

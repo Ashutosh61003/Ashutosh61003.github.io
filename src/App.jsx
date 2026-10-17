@@ -8,6 +8,8 @@ import {
 import Navbar from "./components/Navbar";
 import LiquidFilter from "./components/LiquidFilter";
 import Home from "./pages/Home";
+import Landing from "./pages/Landing";
+import Story from "./pages/Story";
 import Identity from "./pages/Identity";
 import Thoughts from "./pages/Thoughts";
 import Projects from "./pages/Projects";
@@ -43,10 +45,13 @@ const Dreams = React.lazy(() => import("./dreams/Dreams"));
 function Layout() {
   const { pathname } = useLocation();
   const dreams = /^\/dreams\/?$/i.test(pathname);
+  const personal = pathname === "/" || /^\/story\/?$/.test(pathname);
   React.useLayoutEffect(() => {
+    document.documentElement.classList.toggle("personal-mode", personal);
     document.documentElement.classList.toggle("dreams-mode", dreams);
-    return () => document.documentElement.classList.remove("dreams-mode");
-  }, [dreams]);
+    return () => document.documentElement.classList.remove("dreams-mode", "personal-mode");
+  }, [dreams, personal]);
+  if (personal) return <><ScrollToTop />{pathname === "/" ? <Landing /> : <Story />}</>;
   if (dreams)
     return (
       <React.Suspense
@@ -68,7 +73,7 @@ function Portfolio() {
       <Navbar />
       <main style={{ paddingTop: 0, flex: 1 }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/portfolio" element={<Home />} />
           <Route path="/work" element={<Work />} />
           <Route path="/blogs" element={<Thoughts />} />
           <Route path="/identity" element={<Identity />} />

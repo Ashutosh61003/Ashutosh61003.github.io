@@ -1,5 +1,5 @@
 /* Scope the existing portfolio theme without changing its declarations. */
-html:not(.dreams-mode) {
+html:not(.dreams-mode):not(.personal-mode) {
   & {
     --font-display:
       "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont,
