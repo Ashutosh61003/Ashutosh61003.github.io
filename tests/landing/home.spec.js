@@ -177,6 +177,8 @@ test("holding the dock reveals labels, and holding and sliding the plus selects 
   const home = await dock.getByRole("link", { name: "Home", exact: true }).boundingBox();
   await page.mouse.move(home.x + home.width / 2, home.y + home.height / 2);
   await page.mouse.down();
+  await page.waitForTimeout(700);
+  await expect(page.locator(".mobile-navigation")).not.toHaveClass(/is-pressed/);
   await expect(page.locator(".mobile-navigation")).toHaveClass(/is-pressed/);
   await expect(dock.locator(".dock-label").first()).toHaveCSS("opacity", "1");
   await page.mouse.up();
@@ -185,9 +187,49 @@ test("holding the dock reveals labels, and holding and sliding the plus selects 
   await page.mouse.move(plus.x + plus.width / 2, plus.y + plus.height / 2);
   await page.mouse.down();
   await expect(page.locator(".mobile-navigation")).toHaveClass(/is-expanded/);
-  await page.mouse.move(plus.x + plus.width / 2, plus.y + plus.height / 2 - 45, { steps: 5 });
+  await page.mouse.move(plus.x + plus.width / 2, plus.y + plus.height / 2 - 20, { steps: 5 });
   await expect(page.locator(".gesture-selected")).toHaveText("Work");
   await page.mouse.up();
   await expect(page).toHaveURL(/\/work$/);
   await expect(page.locator(".mobile-navigation")).not.toHaveClass(/is-expanded/);
+});
+
+test("sensitive plus gesture reaches every page in a short thumb movement", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const plus = await page.getByRole("button", { name: "Open page menu" }).boundingBox();
+  const x = plus.x + plus.width / 2, y = plus.y + plus.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await expect(page.locator(".mobile-navigation")).toHaveClass(/is-expanded/);
+  for (const [index, name] of ["Home", "Portfolio", "Work", "Projects", "Identity", "Thoughts", "Blogs", "Photos", "Contact", "Dreams"].entries()) {
+    await page.mouse.move(x, y - Math.max(6, index * 8 + 1));
+    await expect(page.locator(".gesture-selected")).toHaveText(name);
+  }
+  await page.mouse.up();
+  await expect(page).toHaveURL(/\/dreams$/);
+});
+test("quick dock taps never leave delayed expansion and repeated menu closing clears its surface", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const intro = page.locator(".landing-intro");
+  await expect(intro).not.toContainText("🌱");
+  await expect(intro).toHaveCSS("font-weight", "400");
+  await expect(intro.locator("strong")).toHaveText("Ashutosh");
+  const home = await page.locator(".mobile-dock a").first().boundingBox();
+  await page.mouse.move(home.x + 20, home.y + 20);
+  await page.mouse.down();
+  await page.waitForTimeout(100);
+  await page.mouse.up();
+  await page.waitForTimeout(1100);
+  await expect(page.locator(".mobile-navigation")).not.toHaveClass(/is-pressed/);
+  for (let i = 0; i < 4; i++) {
+    await page.getByRole("button", { name: "Open page menu" }).click();
+    await page.getByRole("button", { name: "Close page menu", exact: true }).last().click();
+  }
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
+  await expect(page.locator(".mobile-menu")).toHaveCSS("visibility", "hidden");
+  await expect(page.locator(".mobile-menu")).toHaveCSS("opacity", "0");
+  await expect(page.locator(".mobile-dock")).toHaveCSS("height", "58px");
+  await expect(page.locator(".dock-label").first()).toHaveCSS("opacity", "0");
 });

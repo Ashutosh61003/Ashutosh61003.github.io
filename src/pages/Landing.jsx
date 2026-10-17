@@ -40,6 +40,33 @@ export default function Landing() {
   const navigate = useNavigate();
   const isHome = pathname === "/";
   const [pressed, setPressed] = useState(false);
+  const dockHoldTimer = useRef(null);
+  const endDockHold = () => {
+    window.clearTimeout(dockHoldTimer.current);
+    dockHoldTimer.current = null;
+    setPressed(false);
+  };
+  const beginDockHold = () => {
+    endDockHold();
+    dockHoldTimer.current = window.setTimeout(() => setPressed(true), 1000);
+  };
+  useEffect(() => {
+    const reset = () => {
+      window.clearTimeout(dockHoldTimer.current);
+      setPressed(false);
+    };
+    window.addEventListener("pointerup", reset);
+    window.addEventListener("pointercancel", reset);
+    window.addEventListener("blur", reset);
+    document.addEventListener("visibilitychange", reset);
+    return () => {
+      window.clearTimeout(dockHoldTimer.current);
+      window.removeEventListener("pointerup", reset);
+      window.removeEventListener("pointercancel", reset);
+      window.removeEventListener("blur", reset);
+      document.removeEventListener("visibilitychange", reset);
+    };
+  }, []);
   const [selection, setSelection] = useState(-1);
   const gesture = useRef(null);
   const suppressClick = useRef(false);
@@ -47,6 +74,7 @@ export default function Landing() {
   const beginGesture = (event) => {
     if (event.button !== 0) return;
     suppressClick.current = false;
+    endDockHold();
     event.currentTarget.setPointerCapture(event.pointerId);
     const state = { x: event.clientX, y: event.clientY, held: false, moved: false, index: -1 };
     state.timer = window.setTimeout(() => {
@@ -60,10 +88,10 @@ export default function Landing() {
     if (!state?.held) return;
     const dx = event.clientX - state.x;
     const dy = state.y - event.clientY;
-    if (Math.hypot(dx, dy) < 10 && !state.moved) return;
+    if (Math.hypot(dx, dy) < 5 && !state.moved) return;
     state.moved = true;
-    const link = document.elementFromPoint(event.clientX, event.clientY)?.closest("[data-page-index]");
-    state.index = link && Math.abs(dx) > 44 ? Number(link.dataset.pageIndex) : Math.max(0, Math.min(pages.length - 1, Math.floor((dy + dx * .5) / 18)));
+    // Short upward OR leftward thumb travel reaches every option without tile hit-testing stealing selection.
+    state.index = Math.max(0, Math.min(pages.length - 1, Math.floor(Math.max(dy, -dx) / 8)));
     setSelection(state.index);
   };
   const endGesture = (event) => {
@@ -98,7 +126,7 @@ export default function Landing() {
   }, [expanded]);
   useEffect(() => {
     setExpanded(false);
-    setPressed(false);
+    endDockHold();
     setSelection(-1);
   }, [pathname]);
   const [dark, setDark] = useState(() => {
@@ -165,8 +193,8 @@ export default function Landing() {
           </Link>
         </h1>
         <p className="landing-intro">
-          <span>Hey, I’m Ashutosh. 👋 I like making things that solve real problems, and I usually learn best by trying, getting stuck, and figuring things out.</span>{" "}
-          <span>I spend a lot of my time thinking about products, playing with AI, and building little ideas into something people can actually use. I’m still learning, and that’s honestly the part I enjoy most. 🌱</span>{" "}
+          <span>Hey, I’m <strong>Ashutosh</strong>. 👋 I like making things that solve real problems, and I usually learn best by trying, getting stuck, and figuring things out.</span>{" "}
+          <span>I spend a lot of my time thinking about products, playing with AI, and building little ideas into something people can actually use. I’m still learning, and that’s honestly the part I enjoy most.</span>{" "}
           <span>This is my small space on the internet to share my work and whatever I’m curious about next. Have a look around, check out what I’ve built, or just say hello. I’d love to hear from you.</span>
         </p>
       </div>}
@@ -184,7 +212,7 @@ export default function Landing() {
             ))}
           </nav>
         </div>
-        <nav className="mobile-dock" onContextMenu={(event) => event.preventDefault()} onPointerDown={() => setPressed(true)} onPointerUp={() => setPressed(false)} onPointerCancel={() => setPressed(false)} onPointerLeave={() => setPressed(false)} aria-label="Main navigation" aria-hidden={expanded} inert={expanded ? "" : undefined}>
+        <nav className="mobile-dock" onContextMenu={(event) => event.preventDefault()} onPointerDown={beginDockHold} onPointerUp={endDockHold} onPointerCancel={endDockHold} onPointerLeave={endDockHold} onLostPointerCapture={endDockHold} aria-label="Main navigation" aria-hidden={expanded} inert={expanded ? "" : undefined}>
           {primaryPages.map(({ label, to, icon: Icon }) => (
             <Link key={label} to={to} aria-label={label} aria-current={pathname === to ? "page" : undefined}>
               <Icon size={23} strokeWidth={1.6} /><span className="dock-label">{label}</span>

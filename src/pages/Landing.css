@@ -136,7 +136,7 @@ html.landing-mode #root {
     display: block;
     font-size: var(--mobile-font-size);
     line-height: 1.6;
-    font-weight: 600;
+    font-weight: 400;
     color: inherit;
     text-align: left;
     margin: 4px 0 0;
@@ -204,14 +204,16 @@ html.landing-mode #root {
     transform-origin: bottom right;
     pointer-events: none;
     visibility: hidden;
-    transition: opacity 250ms ease, transform 500ms cubic-bezier(.22,1,.36,1), visibility 500ms;
+    transition: opacity 250ms ease, transform 500ms cubic-bezier(.22,1,.36,1), visibility 0s linear 250ms;
+    isolation: isolate;
+    contain: paint;
   }
   .mobile-menu-grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px 10px; }
   .mobile-menu-grid a { font-size: 11px; font-weight: 400; text-decoration: none; text-align: center; line-height: 1.7; }
   .mobile-menu-grid a span { display: grid; place-items: center; height: 58px; border-radius: 17px; background: var(--dock-tile); margin-bottom: 5px; }
   .mobile-menu-backdrop { display: none; position: fixed; inset: 0; background: transparent; cursor: default; }
   .is-expanded .mobile-menu-backdrop { display: block; }
-  .is-expanded .mobile-menu { visibility: visible; pointer-events: auto; opacity: 1; transform: none; }
+  .is-expanded .mobile-menu { transition-delay: 0s; visibility: visible; pointer-events: auto; opacity: 1; transform: none; }
   .is-expanded .mobile-dock { opacity: 0; transform: scale(.94); pointer-events: none; }
   .is-expanded .mobile-menu-toggle svg { transform: rotate(45deg); }
   .landing-page .mobile-navigation a:hover { opacity: 1; }
@@ -278,7 +280,8 @@ html.landing-mode body {
     transition: background-color 480ms cubic-bezier(.4,0,.2,1), transform 400ms cubic-bezier(.22,1,.36,1);
   }
   .mobile-menu-surface path { transition: fill 480ms cubic-bezier(.4,0,.2,1), stroke 480ms cubic-bezier(.4,0,.2,1); }
-  .mobile-dock { -webkit-touch-callout: none; height: 58px; top: auto; user-select: none; -webkit-user-select: none; }
+  .landing-intro strong { font-weight: 600; }
+  .mobile-dock { overflow: hidden; -webkit-touch-callout: none; height: 58px; top: auto; user-select: none; -webkit-user-select: none; }
   .mobile-dock a { position: relative; gap: 0; align-content: center; }
   .dock-label { font-size: 9px; line-height: 1.4; max-height: 0; opacity: 0; transform: translateY(4px); overflow: hidden; transition: max-height 400ms cubic-bezier(.22,1,.36,1), opacity 250ms ease, transform 400ms cubic-bezier(.22,1,.36,1); }
   .is-pressed .mobile-dock { height: 72px; }
