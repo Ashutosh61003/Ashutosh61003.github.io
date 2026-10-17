@@ -840,3 +840,17 @@ html.personal-mode body::after {
   vertical-align: middle;
   margin-right: 8px;
 }
+
+/* Let the document scroll; the legacy portfolio reset gives body a fixed height. */
+html.personal-mode {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+html.personal-mode body {
+  height: auto;
+  min-height: 100svh;
+  overflow-x: clip;
+  overflow-y: visible;
+}

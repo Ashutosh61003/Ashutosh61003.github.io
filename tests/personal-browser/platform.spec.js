@@ -113,6 +113,16 @@ test("mobile navigation, theme, anonymous access and preserved portfolio", async
   await expect(
     page.getByRole("button", { name: "Switch to light mode" }),
   ).toBeVisible();
+  await page.locator(".journal-footer").scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await page
+    .getByRole("link", { name: "Let’s connect ↗", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Let’s find common ground." }),
+  ).toBeVisible();
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  await page.goto("/");
   await page.getByRole("button", { name: "Open navigation" }).click();
   await page.getByRole("link", { name: "About", exact: true }).click();
   await expect(
