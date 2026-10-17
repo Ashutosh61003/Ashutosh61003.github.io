@@ -71,7 +71,7 @@ export function FrontPage() {
           />
           <img
             className="portrait-dark"
-            src="/images/ashutosh-dark.webp"
+            src="/images/ashutosh-dark-studio.webp"
             alt=""
             width="144"
             height="144"
