@@ -40,16 +40,16 @@ function Portfolio() {
       <Navbar />
       <main style={{ paddingTop: 0, flex: 1 }}>
         <Routes>
-          <Route path="/portfolio" element={<Home />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/blogs" element={<Thoughts />} />
-          <Route path="/identity" element={<Identity />} />
-          <Route path="/thoughts" element={<Thoughts />} />
-          <Route path="/project" element={<Projects />} />
-          <Route path="/portfolio/projects" element={<Projects />} />
-          <Route path="/portfolio/*" element={<Home />} />
-          <Route path="/photography" element={<Photography />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route index element={<Home />} />
+          <Route path="work" element={<Work />} />
+          <Route path="blogs" element={<Thoughts />} />
+          <Route path="identity" element={<Identity />} />
+          <Route path="thoughts" element={<Thoughts />} />
+          <Route path="project" element={<Projects />} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="*" element={<Home />} />
+          <Route path="photography" element={<Photography />} />
+          <Route path="contact" element={<Contact />} />
         </Routes>
       </main>
     </>

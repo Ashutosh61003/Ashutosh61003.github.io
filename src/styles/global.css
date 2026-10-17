@@ -26,7 +26,8 @@ body {
     overscroll-behavior-x: none;
     overscroll-behavior-y: none;
     scrollbar-width: none;
-    line-height: 1.6;
+    line-height: 1.7;
+    font-weight: 400;
 }
 
 html::-webkit-scrollbar,
@@ -93,7 +94,7 @@ h4,
 h5,
 h6 {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: -0.02em;
     color: var(--c-text-main);
     line-height: 1.2;
@@ -116,11 +117,15 @@ h6 {
 p {
     font-size: var(--text-body);
     color: var(--c-text-muted);
-    margin-bottom: var(--space-md);
+    margin-bottom: 1.5rem;
 }
 
 a {
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: #a3a3a3;
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+    font-weight: 500;
     color: inherit;
     transition: opacity 0.2s ease;
 }
@@ -136,7 +141,7 @@ button {
 /* Utilities */
 .container {
     width: 90%;
-    max-width: 1200px;
+    max-width: var(--content-width);
     margin: 0 auto;
     padding: 0 var(--space-md);
 }
@@ -271,3 +276,8 @@ h1.hero-title {
         animation: none;
     }
 }
+
+/* Reusable typography and reading layout for future pages. */
+.text-column { max-width: var(--content-width); margin-inline: auto; padding: 5rem 1.5rem; text-align: left; }
+strong, b { font-weight: 500; }
+html.portfolio-mode .container { max-width: 1200px; }

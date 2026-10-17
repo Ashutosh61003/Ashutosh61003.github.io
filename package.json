@@ -13,7 +13,9 @@
     "lint:dreams": "eslint --no-eslintrc --config .eslintrc.dreams.cjs src/dreams src/App.jsx scripts tests/dreams.test.mjs tests/browser playwright.config.js --ext js,jsx,mjs --max-warnings 0",
     "build:pages-root": "node scripts/sync-pages-root.mjs",
     "lint:personal": "eslint --no-eslintrc --config .eslintrc.personal.cjs src/personal src/App.jsx src/pages/Portfolio.jsx --ext js,jsx --max-warnings 0",
-    "test:personal": "firebase emulators:exec --only auth,firestore --project demo-personal \"node --test tests/personal-rules.test.mjs && playwright test -c playwright.personal.config.js\""
+    "test:personal": "firebase emulators:exec --only auth,firestore --project demo-personal \"node --test tests/personal-rules.test.mjs && playwright test -c playwright.personal.config.js\"",
+    "test:site": "playwright test -c playwright.landing.config.js",
+    "lint:site": "eslint --no-eslintrc --config .eslintrc.personal.cjs src/App.jsx src/pages/Landing.jsx src/pages/Portfolio.jsx scripts --ext js,jsx,mjs --max-warnings 0"
   },
   "dependencies": {
     "@use-gesture/react": "^10.3.1",

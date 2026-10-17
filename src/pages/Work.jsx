@@ -96,7 +96,7 @@ const Work = () => {
                                 Resume
                                 <ArrowUpRight size={18} />
                             </a>
-                            <a href="/contact">
+                            <a href="/portfolio/contact">
                                 Contact me
                                 <Mail size={18} />
                             </a>
@@ -164,7 +164,7 @@ const Work = () => {
                 </div>
             </section>
 
-            <a className="work-contact-strip" href="/contact">
+            <a className="work-contact-strip" href="/portfolio/contact">
                 <span>Open to APM, product intern, and early product roles</span>
                 <ArrowUpRight size={22} />
             </a>

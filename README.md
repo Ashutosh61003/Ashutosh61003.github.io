@@ -1,19 +1,18 @@
-# Ashutosh Srivastava — personal website
+# Ashutosh Srivastava
 
-A minimal personal space for current activities, writing, beliefs, projects, life events, and conversations. Built with React, Vite, React Router, Firebase Authentication and Cloud Firestore.
+A minimal personal homepage and the existing blue professional portfolio.
 
-- `/` — current life and recent published content
-- `/about`, `/opinions`, `/projects`, `/beliefs`, `/story` — public reading and connected entries
-- `/portfolio` — original professional portfolio, preserved separately
-- `/connect`, `/messages`, `/spaces` — contact, private communication and discussions
-- `/admin` — existing owner's content dashboard
-- `/dreams` — original personal Dreams workspace
+- `/` — a softly feathered portrait and name; the name opens the portfolio
+- `/portfolio` — professional work, projects and contact details
+
+Light/dark modes remain available. The homepage fits one screen without scrolling.
 
 ```sh
 npm ci
 npm run dev
+npm run lint:site
+npm run test:site
+npm run build:pages-root
 ```
 
-See [PERSONAL_PLATFORM.md](PERSONAL_PLATFORM.md) for the inspected architecture, data model, owner identity, Firebase deployment steps, test commands, hosting details, and first-release boundaries. Live interactive features require publishing the accompanying Firebase rules and indexes and authorizing the custom domain for Google sign-in.
-
-Never commit passwords, service-account keys or private Firebase credentials. The committed Firebase web configuration only identifies the public client application.
+See [SITE_DESIGN.md](SITE_DESIGN.md) for the shared typography, colors, future design defaults, route structure and deployment details. Earlier personal-platform source is retained for reference but is not mounted by the active app.

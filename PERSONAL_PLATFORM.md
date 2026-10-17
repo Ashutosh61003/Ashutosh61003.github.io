@@ -1,3 +1,5 @@
+> Archived implementation notes. The personal platform below has been retired from the active website. See [SITE_DESIGN.md](SITE_DESIGN.md) for the current two-section site.
+
 # Personal platform
 
 ## Existing architecture and preservation

@@ -15,14 +15,14 @@ const highlights = [
 const stackItems = [
     {
         eyebrow: 'Flurn',
-        href: '/work#flurn-work',
+        href: '/portfolio/work#flurn-work',
         title: 'Built EdTech product systems for teachers and operations.',
         copy: 'PRDs, user flows, wireframes, AI Quiz Validator, TeacherHub, TeachAI Assistant, Content Studio CMS, and automation workflows.',
         tags: ['5+ products', '3 releases', '40% less manual effort']
     },
     {
         eyebrow: 'Hugsy',
-        href: '/work#hugsy-work',
+        href: '/portfolio/work#hugsy-work',
         title: 'Worked on early consumer product, onboarding, and growth loops.',
         copy: 'Mobile and web product flows, competitive analysis across 10+ apps, activation experiments, referrals, and launch storytelling.',
         tags: ['1000+ visits', '10+ apps analyzed', '5K-10K views']
@@ -37,9 +37,9 @@ const stackItems = [
 ];
 
 const flowingItems = [
-    { label: 'Work', href: '/work' },
+    { label: 'Work', href: '/portfolio/work' },
     { label: 'Projects', href: '/portfolio/projects' },
-    { label: 'Contact', href: '/contact' },
+    { label: 'Contact', href: '/portfolio/contact' },
     { label: 'Resume', href: '/files/AshutoshSrivastavaResume.pdf', external: true }
 ];
 
@@ -145,11 +145,11 @@ const Home = () => {
                             Projects
                             <ArrowUpRight size={18} />
                         </a>
-                        <a href="/work">
+                        <a href="/portfolio/work">
                             Work
                             <Briefcase size={18} />
                         </a>
-                        <a href="/contact">
+                        <a href="/portfolio/contact">
                             Contact
                             <Mail size={18} />
                         </a>

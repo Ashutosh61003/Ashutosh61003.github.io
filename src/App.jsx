@@ -1,56 +1,46 @@
 import React from "react";
-import { BrowserRouter as Router, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import Landing from "./pages/Landing";
 import "./styles/white-theme.css";
-
 const Portfolio = React.lazy(() => import("./pages/Portfolio"));
-const Personal = React.lazy(() => import("./personal/Personal"));
-const Dreams = React.lazy(() => import("./dreams/Dreams"));
-
 function Layout() {
   const { pathname } = useLocation();
-  const dreams = /^\/dreams\/?$/i.test(pathname);
-  const personal =
-    !dreams &&
-    !/^\/(portfolio(?:\/.*)?|work|blogs|identity|thoughts|project|photography|contact)\/?$/.test(
-      pathname,
-    );
+  const portfolio = /^\/portfolio(?:\/|$)/.test(pathname);
   React.useLayoutEffect(() => {
-    document.documentElement.classList.toggle("personal-mode", personal);
-    document.documentElement.classList.toggle("dreams-mode", dreams);
+    document.documentElement.classList.toggle("landing-mode", !portfolio);
+    document.documentElement.classList.toggle("portfolio-mode", portfolio);
+    if (portfolio) document.documentElement.classList.remove("personal-dark");
     return () =>
-      document.documentElement.classList.remove("dreams-mode", "personal-mode");
-  }, [dreams, personal]);
-  if (personal)
-    return (
-      <React.Suspense fallback={<div style={{ padding: 40 }}>Opening…</div>}>
-        <Personal />
-      </React.Suspense>
-    );
-  if (dreams)
-    return (
-      <React.Suspense
-        fallback={
-          <div style={{ padding: 40, color: "#292724" }}>Opening Dreams…</div>
+      document.documentElement.classList.remove(
+        "landing-mode",
+        "portfolio-mode",
+      );
+  }, [portfolio]);
+  return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route
+        path="/portfolio/*"
+        element={
+          <React.Suspense fallback={null}>
+            <Portfolio />
+          </React.Suspense>
         }
-      >
-        <Dreams />
-      </React.Suspense>
-    );
-  return (
-    <React.Suspense
-      fallback={<div style={{ padding: 40 }}>Opening portfolio…</div>}
-    >
-      <Portfolio />
-    </React.Suspense>
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
-
-function App() {
+export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Layout />
-    </Router>
+    </BrowserRouter>
   );
 }
-
-export default App;

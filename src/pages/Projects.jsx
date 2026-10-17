@@ -13,7 +13,7 @@ const projectImages = [
         role: 'Machine learning, validation design, explainability, and biomedical AI experimentation',
         links: [
             { label: 'Project report', href: '/files/parkinsons-disease-report.pdf' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Built a voice-based biomedical ML framework focused on preventing data leakage while improving transparency for clinical-style model interpretation.',
         approach: [
@@ -44,7 +44,7 @@ const projectImages = [
         role: 'Algorithm design, graph traversal, optimization, and implementation',
         links: [
             { label: 'Project report', href: '/files/fuzzy-rainbow-coloring.pdf' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Co-led a graph algorithm project combining fuzzy logic with rainbow coloring across multiple graph structures.',
         approach: [
@@ -75,7 +75,7 @@ const projectImages = [
         role: 'iOS development, Core ML integration, data flows, and product experience design',
         links: [
             { label: 'GitHub', href: 'https://github.com/AshutoshSri123/SCOPE' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Developed a Solar Capacity Output Potential Estimator for predicting solar generation from user location, roof area, and weather inputs.',
         approach: [
@@ -106,7 +106,7 @@ const projectImages = [
         role: 'Data modeling, SQL analysis, ETL, visualization, and notebook reporting',
         links: [
             { label: 'GitHub', href: 'https://github.com/AshutoshSri123/SQL_Python_EcommerceProject' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Created an analytics system for e-commerce data covering ingestion, relational modeling, querying, segmentation, and revenue analysis.',
         approach: [
@@ -137,7 +137,7 @@ const projectImages = [
         role: 'SwiftUI development, state management, OOP game logic, and sports product flow',
         links: [
             { label: 'GitHub', href: 'https://github.com/AshutoshSri123/DASH-Cricket-App' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Built a cricket scorekeeping app for dynamic teams, innings management, ball-by-ball tracking, and final scorecards.',
         approach: [
@@ -168,7 +168,7 @@ const projectImages = [
         role: 'Deep learning experimentation, audio preprocessing, model comparison, and reporting',
         links: [
             { label: 'GitHub', href: 'https://github.com/AshutoshSri123/CrySense' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Classified infant cries into five categories using audio preprocessing and multiple deep learning approaches.',
         approach: [
@@ -415,7 +415,7 @@ const projectImages = [
         role: 'Founder-led product strategy, product development, growth planning, and business model design',
         links: [
             { label: 'Project report', href: '/files/cherrychat-pitchdeck.pdf' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Website visitors often lack clarity, peer support, and timely help, while website owners lack real-time insight into user pain points and repeated questions.',
         approach: [
@@ -447,7 +447,7 @@ const projectImages = [
         links: [
             { label: 'Project report', href: '/files/guess-the-cricketer-product-report.pdf' },
             { label: 'Live site', href: 'https://guessthecricketer.com' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Cricket fans need a lightweight, repeatable game experience that turns player knowledge into a quick challenge they can play, share, and revisit.',
         approach: [
@@ -505,7 +505,7 @@ const projectImages = [
         role: 'AI system design, data validation strategy, workflow design, and KPI planning',
         links: [
             { label: 'Project report', href: '/files/provider-data-validation.pdf' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Healthcare payer directories often contain inaccurate provider addresses, phone numbers, credentials, and inconsistent records across web, app, and print surfaces.',
         approach: [
@@ -537,7 +537,7 @@ const projectImages = [
         links: [
             { label: 'Project report', href: '/files/cricabode.pdf' },
             { label: 'Live site', href: 'https://cricabode.vercel.app/' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Cricket fans jump between score apps, fantasy apps, social media, polls, and group chats because there is no dedicated place for live predictions, simulations, and fan discussion together.',
         approach: [
@@ -568,7 +568,7 @@ const projectImages = [
         role: 'Product strategy, AI agent flow design, decision scoring, and growth impact modeling',
         links: [
             { label: 'Project report', href: '/files/rail-one-app.pdf' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'When direct trains are unavailable or waitlisted, travelers often leave the rail app to manually compare buses, flights, connecting trains, and backup routes.',
         approach: [
@@ -599,7 +599,7 @@ const projectImages = [
         role: 'Product design, mobile app architecture, marketplace workflow design, and feature planning',
         links: [
             { label: 'Project report', href: '/files/krishi-vyapaar.pdf' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Farmers face dependency on middlemen, limited market access, price fluctuations, low bargaining power, and lack of digital tools for direct buyer access.',
         approach: [
@@ -630,7 +630,7 @@ const projectImages = [
         role: 'Full-stack product planning, system modeling, travel UX, and web application architecture',
         links: [
             { label: 'Project report', href: '/files/wanderlust.pdf' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Travel planning is fragmented across hotel search, itinerary planning, maps, transport details, attractions, and support channels, making trip planning slow and frustrating.',
         approach: [
@@ -661,7 +661,7 @@ const projectImages = [
         role: 'Product analysis, dashboard design, user workflow mapping, and feature justification',
         links: [
             { label: 'Project report', href: '/files/xeno-dashboard.pdf' },
-            { label: 'Contact me', href: '/contact' }
+            { label: 'Contact me', href: '/portfolio/contact' }
         ],
         problem: 'Retail marketers and CRM teams need immediate clarity on campaign performance, revenue, customer engagement, and what to do next without navigating multiple tools.',
         approach: [
@@ -744,7 +744,7 @@ const enrichProject = (project) => ({
     role: project.role || 'Product strategy, UX thinking, research synthesis, and execution planning',
     timeline: project.timeline || 'Portfolio case study',
     links: project.links || [
-        { label: 'Contact me', href: '/contact' }
+        { label: 'Contact me', href: '/portfolio/contact' }
     ],
     problem: project.problem || `${project.title} explores how a product team could turn a broad opportunity into a clearer user problem, a focused product direction, and a practical execution plan.`,
     approach: project.approach || [

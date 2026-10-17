@@ -1,4 +1,4 @@
-name: Check personal platform
+name: Check website
 on:
   pull_request:
   push:
@@ -14,13 +14,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '21'
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run lint:personal
-      - run: npm run test:dreams
-      - run: npm run test:personal
+      - run: npm run lint:site
+      - run: npm run test:site
       - run: npm run build

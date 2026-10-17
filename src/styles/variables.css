@@ -17,8 +17,8 @@
   --c-bg: #F6F9FC;
   /* Very light cool grey */
   --c-surface: #FFFFFF;
-  --c-text-main: #0A2540;
-  --c-text-muted: #425466;
+  --c-text-main: #222222;
+  --c-text-muted: #666666;
   --c-border: #E6EBF1;
 
   --sky-bg:
@@ -40,13 +40,14 @@
   --space-xl: 6rem;
 
   /* Typography - Apple-style Hierarchy */
-  --font-display: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-body: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --text-hero: clamp(3rem, 6vw, 5rem);
   --text-h1: clamp(2rem, 4vw, 3rem);
   --text-h2: 1.75rem;
   --text-body: 1.05rem;
+  --content-width: 44rem;
 
   /* Elevation & Shadows */
   --shadow-sm: 0 2px 5px rgba(50, 50, 93, 0.1), 0 1px 0 rgba(0, 0, 0, 0.02);
