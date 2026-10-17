@@ -16,6 +16,24 @@ const pages = [
 ];
 const primaryPages = [pages[0], pages[2], pages[3], pages[8]];
 
+function LocalDateTime() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  const day = now.getDate();
+  const suffix = day % 100 >= 11 && day % 100 <= 13 ? "th" : ({ 1: "st", 2: "nd", 3: "rd" }[day % 10] || "th");
+  return (
+    <div className="landing-datetime" aria-live="off">
+      <time className="landing-clock" dateTime={now.toISOString()} aria-label="Your local time">{now.toLocaleTimeString("en-GB", { hour12: false })}</time>
+      <time className="landing-date" dateTime={`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`}>
+        {day}{suffix} {now.toLocaleDateString("en-GB", { month: "long" })} {now.getFullYear()}
+      </time>
+    </div>
+  );
+}
+
 export default function Landing() {
   const [expanded, setExpanded] = useState(false);
   const toggleRef = useRef(null);
@@ -50,6 +68,7 @@ export default function Landing() {
   }, [dark]);
   return (
     <main className="landing-page" aria-label="Ashutosh Srivastava">
+      <LocalDateTime />
       <button
         className="landing-theme"
         type="button"
@@ -96,21 +115,17 @@ export default function Landing() {
           </Link>
         </h1>
         <p className="landing-intro">
-          I’m Ashutosh, a curious builder exploring the space between people,
-          products, and technology. I enjoy turning messy ideas into useful
-          experiences, asking better questions, and learning by making things.
-          My work spans product thinking, design, AI, and software, with projects
-          shaped by real problems and everyday curiosity. 🌱 This little corner
-          of the internet is where I share what I’m building, what I’m learning along the way,
-          and the ideas I want to explore next. Outside the finished work,
-          there’s always another question, experiment, or possibility waiting.
-          Take a look around, explore my portfolio, and say hello. I’m glad
-          you’re here. 👋
+          <span>Hey, I’m Ashutosh. 👋 I like making things that solve real problems, and I usually learn best by trying, getting stuck, and figuring things out.</span>{" "}
+          <span>I spend a lot of my time thinking about products, playing with AI, and building little ideas into something people can actually use. I’m still learning, and that’s honestly the part I enjoy most. 🌱</span>{" "}
+          <span>This is my small space on the internet to share my work and whatever I’m curious about next. Have a look around, check out what I’ve built, or just say hello. I’d love to hear from you.</span>
         </p>
       </div>
       <div className={`mobile-navigation ${expanded ? "is-expanded" : ""}`}>
         <button className="mobile-menu-backdrop" aria-label="Close page menu" tabIndex={-1} onClick={() => setExpanded(false)} />
         <div className="mobile-menu" id="mobile-page-menu" ref={menuRef} inert={expanded ? undefined : ""} aria-hidden={!expanded}>
+          <svg className="mobile-menu-surface" viewBox="0 0 350 300" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M 29 1 H 321 Q 349 1 349 29 V 202 Q 349 220 331 220 H 321 C 297 220 280 237 280 261 V 272 Q 280 299 252 299 H 29 Q 1 299 1 271 V 29 Q 1 1 29 1 Z" />
+          </svg>
           <nav aria-label="All pages" className="mobile-menu-grid">
             {pages.map(({ label, to, icon: Icon }) => (
               <Link key={label} to={to} onClick={() => { setExpanded(false); toggleRef.current?.focus(); }}>

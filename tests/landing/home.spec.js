@@ -125,7 +125,7 @@ test("mobile intro and page menu fit and support closing and navigation", async 
   const portrait = await page.locator(".landing-portrait").boundingBox();
   const intro = await page.locator(".landing-intro").boundingBox();
   const dock = await page.locator(".mobile-dock").boundingBox();
-  expect(portrait.y).toBeGreaterThan(280);
+  expect(portrait.y).toBeLessThan(160);
   expect(intro.y + intro.height).toBeLessThan(dock.y);
   await page.getByRole("button", { name: "Open page menu" }).click();
   await expect(page.getByRole("navigation", { name: "All pages" })).toBeVisible();
@@ -135,4 +135,20 @@ test("mobile intro and page menu fit and support closing and navigation", async 
   await page.getByRole("button", { name: "Open page menu" }).click();
   await page.getByRole("navigation", { name: "All pages" }).getByRole("link", { name: "Portfolio", exact: true }).click();
   await expect(page).toHaveURL(/\/portfolio$/);
+});
+
+test("mobile header clock ticks and the full-width menu wraps the toggle", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.goto("/");
+  const clock = page.locator(".landing-clock");
+  await expect(clock).toHaveText(/\d{2}:\d{2}:\d{2}/);
+  const initial = await clock.textContent();
+  await expect(clock).not.toHaveText(initial);
+  await expect(page.locator(".landing-date")).toHaveText(/\d{1,2}(st|nd|rd|th) [A-Z][a-z]+ \d{4}/);
+  const intro = await page.locator(".landing-intro").boundingBox();
+  const dock = await page.locator(".mobile-dock").boundingBox();
+  expect(intro.y + intro.height).toBeLessThan(dock.y);
+  await page.getByRole("button", { name: "Open page menu" }).click();
+  await expect.poll(async () => Math.round((await page.locator(".mobile-menu").boundingBox()).width)).toBe(335);
+  await expect(page.locator(".mobile-menu-surface path")).toBeVisible();
 });
