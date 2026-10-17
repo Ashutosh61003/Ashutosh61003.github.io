@@ -9,6 +9,9 @@ export const portfolioRoutes = [
   "portfolio/blogs",
   "portfolio/photography",
 ];
+// New personal pages intentionally contain only the shared header and navigation.
+export const personalRoutes = ["work", "projects", "identity", "thoughts", "blogs", "photography", "contact", "dreams"];
+export const siteRoutes = [...portfolioRoutes, ...personalRoutes];
 export const retiredRoutes = [
   "about",
   "opinions",
@@ -18,14 +21,5 @@ export const retiredRoutes = [
   "messages",
   "spaces",
   "admin",
-  "Dreams",
-  "dreams",
-  "work",
-  "blogs",
-  "identity",
-  "thoughts",
   "project",
-  "projects",
-  "photography",
-  "contact",
 ];

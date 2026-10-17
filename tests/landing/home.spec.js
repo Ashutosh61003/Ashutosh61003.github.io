@@ -32,7 +32,7 @@ for (const [width, height] of [
     expect(errors).toEqual([]);
   });
 }
-test("theme switches immediately and the latest portrait remains preloaded", async ({
+test("theme transitions together and both new portraits remain preloaded", async ({
   page,
 }) => {
   await page.goto("/");
@@ -41,6 +41,9 @@ test("theme switches immediately and the latest portrait remains preloaded", asy
       (i) => i.complete && i.naturalWidth,
     ),
   );
+  await expect(page.locator(".landing-portrait-light")).toHaveAttribute("src", "/images/ashutosh-diptych-light.webp");
+  expect(await page.locator("body").evaluate(el => getComputedStyle(el).transitionDuration)).toContain("0.48s");
+  expect(await page.locator(".landing-portrait-dark").evaluate(el => getComputedStyle(el).transitionDuration)).toBe("0.48s");
   const images = [];
   page.on("request", (r) => {
     if (r.resourceType() === "image") images.push(r.url());
@@ -56,7 +59,7 @@ test("theme switches immediately and the latest portrait remains preloaded", asy
   );
   await expect(page.locator(".landing-portrait-dark")).toHaveAttribute(
     "src",
-    "/images/ashutosh-dark-studio.webp",
+    "/images/ashutosh-diptych-dark.webp",
   );
   expect(images).toEqual([]);
   await page.reload();
@@ -103,13 +106,11 @@ test("retired personal pages return to the minimal homepage", async ({
     "/about",
     "/opinions",
     "/beliefs",
-    "/projects",
     "/story",
     "/connect",
     "/messages",
     "/spaces",
     "/admin",
-    "/dreams",
     "/opinions/old-entry",
   ]) {
     await page.goto(route);
@@ -151,4 +152,42 @@ test("mobile header clock ticks and the full-width menu wraps the toggle", async
   await page.getByRole("button", { name: "Open page menu" }).click();
   await expect.poll(async () => Math.round((await page.locator(".mobile-menu").boundingBox()).width)).toBe(335);
   await expect(page.locator(".mobile-menu-surface path")).toBeVisible();
+});
+
+test("personal destinations stay empty and only the second shortcut opens the blue portfolio", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const dock = page.getByRole("navigation", { name: "Main navigation" });
+  await expect(dock.getByRole("link").nth(1)).toHaveAttribute("href", "/portfolio");
+  await dock.getByRole("link", { name: "Thoughts", exact: true }).click();
+  await expect(page).toHaveURL(/\/thoughts$/);
+  await expect(page.locator(".landing-content")).toHaveCount(0);
+  await expect(page.locator(".landing-date")).toBeVisible();
+  for (const route of ["/work", "/projects", "/identity", "/blogs", "/photography", "/contact", "/dreams"]) {
+    await page.goto(route);
+    await expect(page).toHaveURL(new RegExp(route + "$"));
+    await expect(page.locator(".landing-content")).toHaveCount(0);
+    await expect(page.locator(".mobile-dock")).toBeVisible();
+  }
+});
+test("holding the dock reveals labels, and holding and sliding the plus selects a page", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const dock = page.locator(".mobile-dock");
+  const home = await dock.getByRole("link", { name: "Home", exact: true }).boundingBox();
+  await page.mouse.move(home.x + home.width / 2, home.y + home.height / 2);
+  await page.mouse.down();
+  await expect(page.locator(".mobile-navigation")).toHaveClass(/is-pressed/);
+  await expect(dock.locator(".dock-label").first()).toHaveCSS("opacity", "1");
+  await page.mouse.up();
+  await expect(page.locator(".mobile-navigation")).not.toHaveClass(/is-pressed/);
+  const plus = await page.getByRole("button", { name: "Open page menu" }).boundingBox();
+  await page.mouse.move(plus.x + plus.width / 2, plus.y + plus.height / 2);
+  await page.mouse.down();
+  await expect(page.locator(".mobile-navigation")).toHaveClass(/is-expanded/);
+  await page.mouse.move(plus.x + plus.width / 2, plus.y + plus.height / 2 - 45, { steps: 5 });
+  await expect(page.locator(".gesture-selected")).toHaveText("Work");
+  await page.mouse.up();
+  await expect(page).toHaveURL(/\/work$/);
+  await expect(page.locator(".mobile-navigation")).not.toHaveClass(/is-expanded/);
 });

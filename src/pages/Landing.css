@@ -253,3 +253,41 @@ html.landing-mode #root {
 @media (prefers-reduced-motion: reduce) {
   .landing-portrait, .landing-content h1, .landing-intro span { animation: none; }
 }
+/* A single timing curve keeps the portrait, page, controls and menu in step. */
+html.landing-mode,
+html.landing-mode body {
+  transition: background-color 480ms cubic-bezier(.4,0,.2,1), color 480ms cubic-bezier(.4,0,.2,1);
+}
+.landing-page { transition: color 480ms cubic-bezier(.4,0,.2,1); }
+.landing-portrait img { transition: opacity 480ms cubic-bezier(.4,0,.2,1); }
+.landing-theme { -webkit-tap-highlight-color: transparent; outline: none; border-radius: 50%; }
+.landing-page .landing-theme:focus-visible { outline: 1px solid currentColor; border-radius: 50%; outline-offset: 2px; }
+.landing-theme:active { transform: scale(.9); }
+.landing-theme { transition: transform 300ms cubic-bezier(.22,1,.36,1); }
+.theme-symbols { display: block; position: relative; width: 17px; height: 17px; }
+.theme-symbols svg { position: absolute; inset: 0; transition: opacity 480ms cubic-bezier(.4,0,.2,1), transform 480ms cubic-bezier(.4,0,.2,1); }
+.theme-sun { opacity: 0; transform: rotate(-90deg) scale(.65); }
+.theme-moon { opacity: 1; transform: none; }
+.personal-dark .theme-sun { opacity: 1; transform: none; }
+.personal-dark .theme-moon { opacity: 0; transform: rotate(90deg) scale(.65); }
+@media (max-width: 600px) {
+  .mobile-dock, .mobile-menu-toggle {
+    transition: background-color 480ms cubic-bezier(.4,0,.2,1), border-color 480ms cubic-bezier(.4,0,.2,1), opacity 220ms ease, transform 500ms cubic-bezier(.22,1,.36,1), height 400ms cubic-bezier(.22,1,.36,1);
+  }
+  .mobile-menu-grid a span, .mobile-dock a {
+    transition: background-color 480ms cubic-bezier(.4,0,.2,1), transform 400ms cubic-bezier(.22,1,.36,1);
+  }
+  .mobile-menu-surface path { transition: fill 480ms cubic-bezier(.4,0,.2,1), stroke 480ms cubic-bezier(.4,0,.2,1); }
+  .mobile-dock { -webkit-touch-callout: none; height: 58px; top: auto; user-select: none; -webkit-user-select: none; }
+  .mobile-dock a { position: relative; gap: 0; align-content: center; }
+  .dock-label { font-size: 9px; line-height: 1.4; max-height: 0; opacity: 0; transform: translateY(4px); overflow: hidden; transition: max-height 400ms cubic-bezier(.22,1,.36,1), opacity 250ms ease, transform 400ms cubic-bezier(.22,1,.36,1); }
+  .is-pressed .mobile-dock { height: 72px; }
+  .is-pressed .dock-label { max-height: 18px; opacity: 1; transform: none; }
+  .mobile-menu-toggle { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .mobile-menu-grid .gesture-selected span { background: color-mix(in srgb, var(--dock-tile) 65%, var(--landing-text)); transform: scale(1.06); }
+  .mobile-menu-grid .gesture-selected { font-weight: 600; }
+  .mobile-menu-grid a { -webkit-user-select: none; user-select: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.landing-mode, html.landing-mode body, .landing-page, .landing-portrait img, .landing-theme, .theme-symbols svg { transition: none; }
+}

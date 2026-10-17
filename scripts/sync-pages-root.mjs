@@ -3,7 +3,7 @@ import { mkdtemp, mkdir, cp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
-import { portfolioRoutes, retiredRoutes } from "./routes.mjs";
+import { siteRoutes, retiredRoutes } from "./routes.mjs";
 const output = await mkdtemp(join(tmpdir(), "personal-site-"));
 try {
   const result = spawnSync(process.execPath, ["scripts/build.mjs"], {
@@ -15,7 +15,7 @@ try {
   await cp(join(output, "assets"), "assets", { recursive: true });
   for (const file of ["index.html", "404.html"])
     await cp(join(output, file), file);
-  for (const route of portfolioRoutes) {
+  for (const route of siteRoutes) {
     await mkdir(route, { recursive: true });
     await cp(join(output, route, "index.html"), join(route, "index.html"));
   }
