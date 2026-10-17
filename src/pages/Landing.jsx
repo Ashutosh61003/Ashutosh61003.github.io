@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './Landing.css';
@@ -7,7 +7,7 @@ export default function Landing() {
   const [dark, setDark] = useState(() => {
     try { return localStorage.getItem('personal-theme') === 'dark'; } catch { return false; }
   });
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.classList.toggle('personal-dark', dark);
     try { localStorage.setItem('personal-theme', dark ? 'dark' : 'light'); } catch { /* Storage may be unavailable. */ }
     return () => document.documentElement.classList.remove('personal-dark');
@@ -26,7 +26,10 @@ export default function Landing() {
         <Link to="/story">Story</Link>
       </nav>
       <section className="personal-intro">
-        <img className="personal-portrait" src={dark ? "/images/ashutosh-dark.png" : "/images/ashutosh-light.png"} alt="Ashutosh Srivastava" width="192" height="192" fetchPriority="high" />
+        <div className="personal-portrait" role="img" aria-label="Ashutosh Srivastava">
+          <img className="portrait-light" src="/images/ashutosh-light.webp" alt="" width="192" height="192" fetchPriority="high" loading="eager" />
+          <img className="portrait-dark" src="/images/ashutosh-dark.webp" alt="" width="192" height="192" fetchPriority="high" loading="eager" />
+        </div>
         <p className="personal-name">Ashutosh Srivastava</p>
         <h1 id="personal-title"><span>A life in the making.</span><span>Ideas, dreams <i>&</i> everything between.</span></h1>
         <p className="personal-caption">A little of who I am. A glimpse of who I’m becoming.</p>
