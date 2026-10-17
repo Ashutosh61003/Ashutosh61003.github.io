@@ -16,9 +16,9 @@ The professional portfolio keeps its blue palette and wider established layout, 
 
 ## Homepage
 
-Only the portrait and the name are visible as content. The underlined name opens `/portfolio`. A small accessible theme button retains light/dark mode. Backgrounds remain `#fcfcfc` and `#040404`, matching the two existing portraits.
+Desktop shows only the portrait and name. Mobile adds a 100-word introduction at one small font size, plus a fixed four-shortcut dock (Home, Work, Projects, Contact) and a plus button that expands a four-column page grid. The underlined name opens `/portfolio`. A small accessible theme button retains light/dark mode. Backgrounds remain `#fcfcfc` and `#040404`, matching the two existing portraits.
 
-The homepage uses `100svh`, responsive spacing and no document scrolling. A radial alpha mask feathers the portrait's circular perimeter, leaving the face sharp. Both optimized portraits preload and stay mounted, so toggling does not fetch a new image. Reduced-motion preferences disable the entrance animation.
+The homepage uses `100svh`, responsive spacing and no document scrolling. The portrait has a sharp circular crop. Its previous position is retained on taller mobile screens; shorter phones adapt to fit the intro above the dock. Both optimized portraits preload and stay mounted, so toggling does not fetch a new image. Reduced-motion preferences disable entrance and menu animations. The menu supports Escape, focus restoration, outside-click dismissal and inert hidden links.
 
 ## Development and deployment
 
